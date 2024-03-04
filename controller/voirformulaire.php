@@ -1,74 +1,101 @@
 <?php
 require_once "../model/crud_projet.php";
-require_once "../config.php";
-require_once "../PHPMailer/src/PHPMailer.php";
-require_once "../PHPMailer/src/SMTP.php";
-require_once "../PHPMailer/src/Exception.php";
+require_once '../PHPMailer/src/PHPMailer.php';
+require_once '../PHPMailer/src/SMTP.php';
+require_once '../PHPMailer/src/Exception.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$crud_projet = new crud_projet();
-$n = $crud_projet->count();
-$l = $crud_projet->findAll(); //liste
+// Initialisez les variables
+$n = 0;
+$l = [];
+$search_results = [];
 
-// Traitement de la soumission du formulaire de refus
-if (isset($_POST['avis']) && $_POST['avis'] === 'refus') {
-    // Vérifier si le champ de raison de refus est vide
-    if (empty($_POST['raison_refus'])) {
-        echo "Veuillez saisir une raison de refus.";
-    } else {
-        // Récupérer la raison de refus saisie par le professeur
-        $raison_refus = $_POST['raison_refus'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Vérifie si le champ de recherche n'est pas vide
+    if (!empty($_POST['nom_entreprise'])) {
+        // Récupère la valeur entrée par l'utilisateur
+        $search_term = $_POST['nom_entreprise'];
 
-        // Récupérer les adresses e-mail des étudiants
-        $id_projet = $_POST['id_projet'];
-        $sqlEmails = "SELECT email_etud1, email_etud2 FROM etudiant WHERE id_projet = ?";
-        $stmtEmails = $pdo->prepare($sqlEmails);
-        $stmtEmails->execute([$id_projet]);
-        $emails = $stmtEmails->fetch(PDO::FETCH_ASSOC);
+        // Construit la requête SQL avec la clause WHERE pour filtrer les résultats
+        $sql = "SELECT * FROM projet 
+        JOIN etudiant ON projet.cin_etudiant1 = etudiant.cin_etudiant1 
+        WHERE etudiant.nom_prenom_etud1 LIKE :search_term 
+        OR etudiant.nom_prenom_etud2 LIKE :search_term 
+        OR etudiant.cin_etudiant1 LIKE :search_term 
+        OR etudiant.cin_etud2 LIKE :search_term 
+        OR etudiant.email_etud1 LIKE :search_term 
+        OR etudiant.eamil_etud2 LIKE :search_term";
 
-        $emailBinome1 = $emails['email_etud1'];
-        $emailBinome2 = $emails['email_etud2'];
+        // Créer une nouvelle connexion PDO
+        require_once "../config.php";
+        $connexion = new connexion();
+        $pdo = $connexion->getConnexion();
 
-        // Envoyer un e-mail aux étudiants
-        require_once "../PHPMailer/src/PHPMailer.php";
-        require_once "../PHPMailer/src/SMTP.php";
-        require_once "../PHPMailer/src/Exception.php";
+        // Exécute la requête avec le terme de recherche
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(array(':search_term' => "%$search_term%"));
 
-        // Créer une instance de PHPMailer
-        $mail = new PHPMailer(true);
+        // Récupère les résultats de la requête
+        $search_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        try {
-            // Paramètres SMTP
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'mahdibeyy@gmail.com'; // Votre adresse email SMTP
-            $mail->Password = 'vezrnllldvzwiclg';
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
-
-            // Paramètres de l'email
-            $mail->setFrom('mahdibeyy@gmail.com', 'Mahdi Bey');
-            $mail->addAddress($emailBinome1);
-            $mail->addAddress($emailBinome2);
-
-            // Contenu de l'email
-            $mail->isHTML(true);
-            $mail->Subject = 'Refus du projet';
-            $mail->Body = "Votre projet a été refusé pour la raison suivante : $raison_refus";
-
-            // Envoyer l'e-mail
-            $mail->send();
-            echo 'E-mail envoyé avec succès.';
-        } catch (Exception $e) {
-            echo "Erreur lors de l'envoi de l'e-mail : {$mail->ErrorInfo}";
-        }
+        // Compte le nombre de résultats
+        $n = count($search_results);
     }
 }
 
-// Inclure le fichier vue
+$crud_projet = new crud_projet();
+
+// Si aucune recherche n'a été effectuée, récupérez la liste complète des étudiants
+if (empty($search_results)) {
+    $n = $crud_projet->count();
+    $l = $crud_projet->findAll(); //liste
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['avis']) && $_POST['avis'] == 'refus') {
+    // Récupérer les adresses e-mail des étudiants
+    $projetId = $_POST['id_projet']; // ID du projet à partir du formulaire
+
+    $crud_projet = new crud_projet();
+    $projet = $crud_projet->findById($projetId); // Supposons que findById retourne un tableau avec les détails du projet, y compris les adresses e-mail des étudiants
+
+    $emailEtud1 = $projet['email_etud1']; // Supposons que 'email_etud1' contient l'adresse e-mail du premier étudiant
+    $emailEtud2 = $projet['eamil_etud2']; // Supposons que 'email_etud2' contient l'adresse e-mail du deuxième étudiant
+
+    // Récupérer la raison de refus depuis le formulaire
+    $raisonRefus = $_POST['raison_refus'];
+
+    // Envoyer un e-mail aux étudiants
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com'; // Serveur SMTP
+        $mail->SMTPAuth   = true;
+        $mail->Username = 'mahdibeyy@gmail.com'; // Votre adresse email SMTP
+        $mail->Password = 'vezrnllldvzwiclg'; // Mot de passe SMTP
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Activer le cryptage TLS
+        $mail->Port       = 587; // Port SMTP
+
+        //Recipients
+        $mail->setFrom('mahdibeyy@gmail.com', 'mahdi bey');
+        $mail->addAddress($emailEtud1); // Ajouter l'adresse e-mail du premier étudiant
+        $mail->addAddress($emailEtud2); // Ajouter l'adresse e-mail du deuxième étudiant
+
+        //Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Raison de refus';
+        $mail->Body    = 'Raison de refus : ' . $raisonRefus;
+
+        $mail->send();
+        echo 'E-mail envoyé avec succès';
+    } catch (Exception $e) {
+        echo "Erreur lors de l'envoi de l'e-mail : {$mail->ErrorInfo}";
+    }
+}
+
+
 include "../view/voirformulaire.php";
 ?>

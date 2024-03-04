@@ -37,4 +37,16 @@ class crud_projet extends crud
             $res = $this->pdo->query($sql);
             return $res->fetchAll(PDO::FETCH_NUM);
         }
+        function delete_projet($cin_etudiant1)
+        {
+            try {
+                $sql = "DELETE FROM projet WHERE cin_etudiant1 = :cin_etudiant1";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindParam(':cin_etudiant1', $cin_etudiant1);
+                $stmt->execute();
+            } catch (PDOException | Exception $e) {
+                throw new Exception("An error occurred while deleting project: " . $e->getMessage());
+            }
+        }
+        
 }
