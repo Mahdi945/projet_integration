@@ -74,7 +74,7 @@ if(isset($_POST['cin']) && isset($_POST['email']) && isset($_POST['Password']) &
                 $mail->addAddress($fEmail); // Email du destinataire
                 
                 $mail->isHTML(true); // Format de l'email en HTML
-                $mail->Subject = 'Code de vérification'; // Sujet de l'email
+                $mail->Subject = 'Code de verification'; // Sujet de l'email
                 $mail->Body = 'Votre code OTP est : ' . $otp; // Corps de l'email
                 
                 $mail->send(); // Envoyer l'email

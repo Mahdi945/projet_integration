@@ -34,13 +34,15 @@ class crud_etudiant extends crud
         } catch (PDOException $e) {
             throw new Exception("Une erreur s'est produite lors de la mise à jour du projet: " . $e->getMessage());
         }
-    }
+    
+}
 
-    function inscrit($cin, $email, $p) {
+    function inscrit($cin, $p) {
         try {
-            $sql = "UPDATE etudiant SET password = :password, email_etud1 = :email WHERE cin_etudiant1 = :cin";
+            $sql = "UPDATE etudiant SET password = :password WHERE 
+            cin_etudiant1 = :cin";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute(array(':password' => $p, ':email' => $email, ':cin' => $cin));
+            $stmt->execute(array(':password' => $p, ':cin' => $cin));
 
             // Check if the query was successful
             $res = $stmt->rowCount();
@@ -52,6 +54,20 @@ class crud_etudiant extends crud
         } catch (PDOException | Exception $e) {
             throw new Exception("Une erreur s'est produite lors de l'inscription: " . $e->getMessage());
         }
+
+
     }
+
+    function delete_etud($cin_etudiant1)
+    {
+        try {
+            $sql = "DELETE FROM etudiant WHERE cin_etudiant1 = :cin_etudiant1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':cin_etudiant1', $cin_etudiant1);
+            $stmt->execute();
+        } catch (PDOException | Exception $e) {
+            throw new Exception("Une erreur s'est produite lors de la suppression de l'étudiant: " . $e->getMessage());
+        }
+    }
+    
 }
-?>
