@@ -72,8 +72,6 @@ INSERT INTO `etudiant` (`cin_etudiant1`, `nom_prenom_etud1`, `email_etud1`, `gro
 ('145', '', 'mahdibeyy@gmail.com', '', '', '', '', '', '$2y$10$sTmOkQEPl9D1dvMj4pSlje6/Ub7fz4JPqWpq1uovbQ54mcvNa1D.q', 1),
 ('145', '', 'mahdibeyy@gmail.com', '', '', '', '', '', '$2y$10$sTmOkQEPl9D1dvMj4pSlje6/Ub7fz4JPqWpq1uovbQ54mcvNa1D.q', 1),
 ('145', '', 'mahdibeyy@gmail.com', '', '', '', '', '', '$2y$10$sTmOkQEPl9D1dvMj4pSlje6/Ub7fz4JPqWpq1uovbQ54mcvNa1D.q', 1),
-('555', '', 'mahdibey2002@gmail.com', '', '', '', '', '', '', 0),
-('555', '', 'mahdibey2002@gmail.com', '', '', '', '', '', '', 0),
 ('098', '', 'mahdibeyy@gmail.com', '', '', '', '', '', '$2y$10$PrXfLadcaNPtVyqA9IbHvO89xSGm7kVhsYl3OC3iJD39UAgs9c3/m', 1),
 ('098', '', 'mahdibeyy@gmail.com', '', '', '', '', '', '$2y$10$PrXfLadcaNPtVyqA9IbHvO89xSGm7kVhsYl3OC3iJD39UAgs9c3/m', 1),
 ('0999', '', 'mahdibeyy@gmail.com', '', '', '', '', '', '$2y$10$m0opPa59JA6ucs8BmEmla.NcQfABU4G/8f9vin4EChMQzWXfNjZiu', 1),
