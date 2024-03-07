@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>La Liste de tous les étudiants</title>
     <style>
@@ -108,6 +109,56 @@
             height: 300px;
             width: 400px;
         }
+        .table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f5f5f5;
+}
+
+.btn {
+    background-color: #3498db;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-control {
+    flex: 1;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
     </style>
 </head>
 
@@ -116,7 +167,8 @@
         <h1>La Liste de tous les étudiants</h1>
         <form class="navbar-form navbar-left" role="search" method="post" action="">
             <div class="form-group">
-                <input type="text" name="nom_entreprise" class="form-control" placeholder="nom de l'etudiant" style="width: 200px;">
+                <input type="text" name="nom_entreprise" class="form-control" placeholder="nom de l'etudiant"
+                    style="width: 200px;">
                 <button type="submit" class="btn btn-default">Rechercher</button>
             </div>
             <?php 
@@ -158,7 +210,7 @@
                     echo "<td>" . (isset($par['encadreur_entreprise']) ? $par['encadreur_entreprise'] : '') . "</td>";
                     echo "<td>" . (isset($par['encadreur_iset']) ? $par['encadreur_iset'] : '') . "</td>";
                     echo "<td>" . (isset($par['fiche']) ? $par['fiche'] : '') . "</td>";
-                    echo "<td><button type='button' class='btn'>Valider</button></td>";
+                    echo "<td><button type='button' class='btn' onclick='validerProjet(this)'>Valider</button></td>";
                     echo "<td><button type='button' class='btn' onclick='showRefusForm(this)'>Refuser</button></td>";
                     echo "</tr>";
                 }
@@ -196,7 +248,7 @@
                     echo "<td>" . (isset($par[2]) ? $par[2] : '') . "</td>"; // Vérifie si la clé existe
                     echo "<td>" . (isset($par[1]) ? $par[1] : '') . "</td>"; // Vérifie si la clé existe
                     echo "<td>" . (isset($par[4]) ? $par[4] : '') . "</td>"; // Vérifie si la clé existe
-                    echo "<td><button type='button' class='btn'>Valider</button></td>";
+                    echo "<td><button type='button' class='btn' onclick='validerProjet(this)' >Valider</button></td>";
                     echo "<td><button type='button' class='btn' onclick='showRefusForm(this)'>Refuser</button></td>";
                     echo "</tr>";
                 }
@@ -205,26 +257,77 @@
             echo "Aucun résultat trouvé.";
         }
         ?>
-       <div id="refusForm" style="display: none;">
+        <div id="refusForm" style="display: none;">
             <span class="close-icon" onclick="closeRefusForm()"><i class="fas fa-times"></i></span>
             <h2>Raison de refus</h2>
             <form action="" method="post">
                 <input type="hidden" id="idProjetRefus" name="id_projet">
+                <input type="hidden" id="emailEtud1" name="email_etud1">
+                <input type="hidden" id="emailEtud2" name="email_etud2">
                 <textarea name="raison_refus" id="raisonRefus" cols="30" rows="5"></textarea><br>
                 <button type="submit" name="avis" value="refus" class="btn">Envoyer</button>
             </form>
         </div>
+        
     </div>
 
     <script>
         function showRefusForm(button) {
             var idProjet = button.parentNode.parentNode.querySelector('td:first-child').innerText;
+            var emailEtud1 = button.parentNode.parentNode.querySelector('td:nth-child(5)').innerText;
+            var emailEtud2 = button.parentNode.parentNode.querySelector('td:nth-child(6)').innerText;
+
             document.getElementById("idProjetRefus").value = idProjet;
+            document.getElementById("emailEtud1").value = emailEtud1;
+            document.getElementById("emailEtud2").value = emailEtud2;
+
             document.getElementById("refusForm").style.display = "block";
         }
+
         function closeRefusForm() {
             document.getElementById("refusForm").style.display = "none";
         }
+       
+ 
+    function validerProjet(button) {
+    var emailEtud1 = button.parentElement.parentElement.cells[4].innerText;
+    var emailEtud2 = button.parentElement.parentElement.cells[5].innerText;
+
+    // Envoyer un e-mail de validation aux adresses e-mail des deux étudiants
+    var formData = new FormData();
+    formData.append('email_etud1', emailEtud1);
+    formData.append('email_etud2', emailEtud2);
+    formData.append('avis', 'valider');
+
+    fetch('../controller/voirformulaire.php', {
+        method: 'POST',
+        body: formData
+    })
+    
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erreur lors de la requête');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert("E-mail de validation envoyé aux étudiants : " + emailEtud1 + ", " + emailEtud2);
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+    });
+}
+   
+
+        <?php if(isset($emailEnvoye) && $emailEnvoye): ?>
+        alert("E-mail de refus envoyé avec succès");
+        <?php endif; ?>
+        <?php if(isset($emailEnvoyee) ): ?>
+        alert("E-mail de validation envoyé avec succès");
+        <?php endif; ?>
+        $emailEnvoyee
     </script>
 </body>
 

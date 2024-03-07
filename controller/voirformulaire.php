@@ -7,7 +7,6 @@ require_once '../PHPMailer/src/Exception.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Initialisez les variables
 $n = 0;
 $l = [];
 $search_results = [];
@@ -47,55 +46,87 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $crud_projet = new crud_projet();
 
-// Si aucune recherche n'a été effectuée, récupérez la liste complète des étudiants
+// Si aucune recherche n'a été effectuée, récupère la liste complète des étudiants
 if (empty($search_results)) {
     $n = $crud_projet->count();
     $l = $crud_projet->findAll(); //liste
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['avis']) && $_POST['avis'] == 'refus') {
-    // Récupérer les adresses e-mail des étudiants
-    $projetId = $_POST['id_projet']; // ID du projet à partir du formulaire
-
-    $crud_projet = new crud_projet();
-    $projet = $crud_projet->findById($projetId); // Supposons que findById retourne un tableau avec les détails du projet, y compris les adresses e-mail des étudiants
-
-    $emailEtud1 = $projet['email_etud1']; // Supposons que 'email_etud1' contient l'adresse e-mail du premier étudiant
-    $emailEtud2 = $projet['eamil_etud2']; // Supposons que 'email_etud2' contient l'adresse e-mail du deuxième étudiant
-
-    // Récupérer la raison de refus depuis le formulaire
+    // Récupérer la raison de refus et les adresses e-mail depuis le formulaire
     $raisonRefus = $_POST['raison_refus'];
+    $emailEtud1 = $_POST['email_etud1'];
+    $emailEtud2 = $_POST['email_etud2'];
 
     // Envoyer un e-mail aux étudiants
     $mail = new PHPMailer(true);
 
     try {
-        //Server settings
+        // Configuration du serveur SMTP
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com'; // Serveur SMTP
         $mail->SMTPAuth   = true;
-        $mail->Username = 'mahdibeyy@gmail.com'; // Votre adresse email SMTP
+        $mail->Username = 'mahdibeyy@gmail.com'; // Votre adresse e-mail SMTP
         $mail->Password = 'vezrnllldvzwiclg'; // Mot de passe SMTP
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Activer le cryptage TLS
         $mail->Port       = 587; // Port SMTP
 
-        //Recipients
-        $mail->setFrom('mahdibeyy@gmail.com', 'mahdi bey');
-        $mail->addAddress($emailEtud1); // Ajouter l'adresse e-mail du premier étudiant
-        $mail->addAddress($emailEtud2); // Ajouter l'adresse e-mail du deuxième étudiant
-
-        //Content
+        // Contenu de l'e-mail
         $mail->isHTML(true);
         $mail->Subject = 'Raison de refus';
         $mail->Body    = 'Raison de refus : ' . $raisonRefus;
 
+        // Ajouter les adresses e-mail des étudiants
+        $mail->addAddress($emailEtud1);
+        $mail->addAddress($emailEtud2);
+
+        // Envoyer l'e-mail
         $mail->send();
-        echo 'E-mail envoyé avec succès';
+
+        $emailEnvoye = true; // Définir la variable à true après avoir envoyé l'e-mail
+        
     } catch (Exception $e) {
         echo "Erreur lors de l'envoi de l'e-mail : {$mail->ErrorInfo}";
     }
 }
 
+// Nouvelle fonction pour l'envoi d'email de validation
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['avis']) && $_POST['avis'] == 'valider') {
+    $emailEtud1 = $_POST['email_etud1'];
+    $emailEtud2 = $_POST['email_etud2'];
+
+    // Envoyer un e-mail de validation aux étudiants
+    $mail = new PHPMailer(true);
+
+    try {
+        // Configuration du serveur SMTP
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com'; // Serveur SMTP
+        $mail->SMTPAuth   = true;
+        $mail->Username = 'mahdibeyy@gmail.com'; // Votre adresse e-mail SMTP
+        $mail->Password = 'vezrnllldvzwiclg'; // Mot de passe SMTP
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Activer le cryptage TLS
+        $mail->Port       = 587; // Port SMTP
+
+        // Contenu de l'e-mail
+        $mail->isHTML(true);
+        $mail->Subject = 'Validation de PFE';
+        $mail->Body    = 'Votre PFE a été validé. Félicitations !';
+
+        // Ajouter les adresses e-mail des étudiants
+        $mail->addAddress($emailEtud1);
+        $mail->addAddress($emailEtud2);
+
+        // Envoyer l'e-mail
+        $mail->send();
+
+        $emailEnvoyee = true; // Définir la variable à true après avoir envoyé l'e-mail
+        
+    } catch (Exception $e) {
+        echo "Erreur lors de l'envoi de l'e-mail : {$mail->ErrorInfo}";
+    }
+}
 
 include "../view/voirformulaire.php";
+
 ?>

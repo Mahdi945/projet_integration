@@ -37,4 +37,5 @@ class crud_projet extends crud
             $res = $this->pdo->query($sql);
             return $res->fetchAll(PDO::FETCH_NUM);
         }
+        
 }
