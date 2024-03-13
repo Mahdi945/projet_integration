@@ -31,6 +31,10 @@ if(isset($_POST['uname']) && isset($_POST['pass'])){
                 // Redirect to homeparticipant.php for participants
                 header("Location: ../view/formulaire.php");
                 exit;
+            } else {
+                // Mot de passe incorrect, rediriger vers la même page
+                header("Location: ../view/loginEtudiant.php?error=Invalid password");
+                exit;
             }
         }
 
@@ -41,23 +45,22 @@ if(isset($_POST['uname']) && isset($_POST['pass'])){
         if ($stmtAdmin->rowCount() == 1) {
             $admin = $stmtAdmin->fetch();
             $password = $admin['password'];
-            
+            if (password_verify($pass, $password)) {
                 $_SESSION['admin_id'] = $admin['id'];
                 $_SESSION['admin_name'] = $admin['nom_a'];
                 // Redirect to homeadmin.php for admins
                 header("Location: ../controller/voirformulaire.php");
                 exit;
+            } else {
+                // Mot de passe incorrect, rediriger vers la même page
+                header("Location: ../view/loginEtudiant.php?error=Invalid password");
+                exit;
             }
         }
-       
     }
-
+}
 else {
     header("Location: ../view/signup.php?error=error");
     exit;
 }
-
-
-
-
 ?>

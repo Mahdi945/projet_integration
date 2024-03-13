@@ -9,140 +9,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>La Liste de tous les étudiants</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .form-control {
-            flex: 1;
-            padding: 8px;
-            margin-right: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .btn {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background-color: #2980b9;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .table-header {
-            background-color: #f5f5f5;
-        }
-
-        .table-data td {
-            padding: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .close-icon {
-            float: right;
-            cursor: pointer;
-            color: #888;
-        }
-
-        .close-icon:hover {
-            color: #555;
-        }
-
-        #refusForm {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 999;
-        }
-
-        #refusForm h2 {
-            margin-bottom: 10px;
-        }
-
-        #refusForm textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            height: 300px;
-            width: 400px;
-        }
-        .table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table th, .table td {
-    padding: 8px;
-    border: 1px solid #ddd;
-}
-
-.table th {
+     body {
+    font-family: Arial, sans-serif;
     background-color: #f5f5f5;
-}
-
-.btn {
-    background-color: #3498db;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.btn:hover {
-    background-color: #2980b9;
+    padding: 20px;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 1400px; /* Augmenter la valeur de la largeur maximale */
+    margin: 0 auto; /* Ajouter une marge automatique à gauche et à droite */
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .form-group {
@@ -159,12 +43,83 @@
     border-radius: 4px;
     box-sizing: border-box;
 }
+
+.btn {
+    background-color: #3498db;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    padding: 4px; /* Réduire la taille du padding */
+    border: 1px solid #ddd;
+    max-width: 100px; /* Largeur maximale des cellules */
+    white-space: nowrap; /* Empêcher le texte de se retourner à la ligne */
+    overflow: hidden; /* Cacher le contenu qui dépasse */
+    text-overflow: ellipsis; /* Afficher des points de suspension (...) pour indiquer un contenu coupé */
+}
+
+.table th {
+    background-color: #f5f5f5;
+}
+
+.close-icon {
+    float: right;
+    cursor: pointer;
+    color: #888;
+}
+
+.close-icon:hover {
+    color: #555;
+}
+
+#refusForm {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+
+#refusForm h2 {
+    margin-bottom: 10px;
+}
+
+#refusForm textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    height: 300px;
+    width: 400px;
+}
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>La Liste de tous les étudiants</h1>
+        
         <form class="navbar-form navbar-left" role="search" method="post" action="">
             <div class="form-group">
                 <input type="text" name="nom_entreprise" class="form-control" placeholder="nom de l'etudiant"
@@ -231,7 +186,7 @@
                         <th>Encadreur Entreprise</th>
                         <th>Encadreur ISET</th>
                         <th>Fiche</th>
-                        <th colspan='2'>Decision</th>
+                        <th colspan='2'>   Decision</th>
                     </tr>
                 </thead>
                 <tbody>";
@@ -288,7 +243,9 @@
             document.getElementById("refusForm").style.display = "none";
         }
        
- 
+     function afficherMessageValidation() {
+            alert("Étudiants validés avec succès !");
+        }
     function validerProjet(button) {
     var emailEtud1 = button.parentElement.parentElement.cells[4].innerText;
     var emailEtud2 = button.parentElement.parentElement.cells[5].innerText;
@@ -309,12 +266,28 @@
             throw new Error('Erreur lors de la requête');
         }
         return response.json();
-    })
+    })  
     .then(data => {
         if (data.success) {
-            alert("E-mail de validation envoyé aux étudiants : " + emailEtud1 + ", " + emailEtud2);
+             afficherMessageValidation();
         }
     })
+    .then(data => {
+    if (data.success) {
+        // Afficher le message de validation
+        var validationMessage = document.getElementById('validationMessage');
+        validationMessage.style.display = 'block';
+        afficherMessageValidation();
+        // Rediriger après 5 secondes
+        setTimeout(function() {
+            window.location.href = '../view/loginEtudiant.php';
+        }, 5000);
+    } else {
+        throw new Error('Erreur lors de la validation');
+    }
+})
+
+   
     .catch(error => {
         console.error('Erreur:', error);
     });
@@ -324,10 +297,8 @@
         <?php if(isset($emailEnvoye) && $emailEnvoye): ?>
         alert("E-mail de refus envoyé avec succès");
         <?php endif; ?>
-        <?php if(isset($emailEnvoyee) ): ?>
-        alert("E-mail de validation envoyé avec succès");
-        <?php endif; ?>
-        $emailEnvoyee
+        
+        
     </script>
 </body>
 

@@ -50,12 +50,26 @@ include('../config.php');
       margin-left: auto;
       
     }
+    .validation-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #42ba96;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 999;
+}
+
   </style>
 </head>
 
 <body>
   <div class="container">
     <div class="forms-container">
+      
       <div class="signin-signup">
         <form action="../model/login.php" method="POST" class="sign-in-form">
             

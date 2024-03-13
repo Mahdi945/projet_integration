@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['avis']) && $_POST['avi
         echo "Erreur lors de l'envoi de l'e-mail : {$mail->ErrorInfo}";
     }
 }
-
+$emailEnvoyee = false;
 // Nouvelle fonction pour l'envoi d'email de validation
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['avis']) && $_POST['avis'] == 'valider') {
     $emailEtud1 = $_POST['email_etud1'];
@@ -121,7 +121,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['avis']) && $_POST['avi
         $mail->send();
 
         $emailEnvoyee = true; // Définir la variable à true après avoir envoyé l'e-mail
-        
+        header('Content-Type: application/json');
+        echo json_encode(['success' => true]);
+        exit;
     } catch (Exception $e) {
         echo "Erreur lors de l'envoi de l'e-mail : {$mail->ErrorInfo}";
     }
