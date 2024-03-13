@@ -88,7 +88,7 @@ include('../config.php');
             <input type="password" class="form-control"name="pass" placeholder="Password">
           </div>
           <div class="Forget-Pass">
-          <a href="Forget.php" class="Forget">Forget Password ?</a></div>
+          <a href="../view/forget.php" class="Forget">Forget Password ?</a></div>
           
           <button type="submit" class="btn solid">  Login  </button>
           <p class="social-text">Or Sign in with social platforms</p>
