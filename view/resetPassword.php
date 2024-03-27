@@ -1,12 +1,12 @@
 <?php include('../config.php'); ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
-  <title>Reset Password</title>
+  <title>Réinitialiser le mot de passe</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -73,15 +73,16 @@
     <form action="../controller/resetPassword.php" method="POST">
       <div class="input-field">
         <i class="fas fa-lock"></i>
-        <input type="text" name="otp" placeholder="Enter OTP" />
+        <input type="text" name="otp" placeholder="Entrez le code OTP" />
       </div>
       <div class="input-field">
         <i class="fas fa-lock"></i>
-        <input type="password" name="newPassword" placeholder="Enter New Password" />
+        <input type="password" name="newPassword" placeholder="Entrez le nouveau mot de passe" />
       </div>
-      <button type="submit" class="btn solid">Reset Password</button>
+      <button type="submit" class="btn solid">Réinitialiser le mot de passe</button>
     </form>
   </div>
 </body>
 
 </html>
+

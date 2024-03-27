@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../style.css" />
-    <title>Sign in & Sign up Form</title>
+    <title>Inscription</title>
     <style>
         .alert {
             padding: 1rem;
@@ -40,7 +40,7 @@
         <div class="forms-container">
             <div class="signin-signup">
                 <form action="../controller/signup.php" method="POST" class="sign-up-form">
-                    <h2 class="title">Sign up</h2>
+                    <h2 class="title">Inscription</h2>
                     
                     <div class="input-field">
                         <i class="fas fa-user"></i>
@@ -54,13 +54,13 @@
                     
                     <div class="input-field">
                         <i class="fas fa-lock"></i>
-                        <input type="password" name="Password" placeholder="Password" />
+                        <input type="password" name="Password" placeholder="Mot De Passe" />
                     </div>
                     <div class="input-field">
                         <i class="fas fa-lock"></i>
-                        <input type="password" name="Conf-Password" placeholder="Confirm Password" />
+                        <input type="password" name="Conf-Password" placeholder="Confirmer Mot De Passe" />
                     </div>
-                    <input type="submit" name="submit" class="btn" value="Sign up" />
+                    <input type="submit" name="submit" class="btn" value="s'inscrire" />
                     
                 </form>
             </div>
@@ -70,13 +70,13 @@
             </div>
             <div class="panel right-panel">
                 <div class="content">
-                    <h3>One of us ?</h3>
+                    <h3>etudiant de l'iset ?</h3>
                     <p>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
                         laboriosam ad deleniti.
                     </p>
                     <a href="../view/loginEtudiant.php" class="btn transparent" id="sign-in-btn" style="padding:10px 20px;text-decoration:none">
-                        Sign in
+                        Se Connecter
                     </a>
                 </div>
                 

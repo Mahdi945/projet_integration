@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <title>La Liste de tous les étudiants</title>
     <style>
      body {
@@ -186,7 +187,8 @@ h1 {
                         <th>Encadreur Entreprise</th>
                         <th>Encadreur ISET</th>
                         <th>Fiche</th>
-                        <th colspan='2'>   Decision</th>
+                        <th colspan='2' class='text-center'>Decision</th>
+                       
                     </tr>
                 </thead>
                 <tbody>";
@@ -223,6 +225,8 @@ h1 {
                 <button type="submit" name="avis" value="refus" class="btn">Envoyer</button>
             </form>
         </div>
+        <button id="exportExcelBtn" class="btn btn-primary" onclick="extraireExcel()">Extraire Excel</button>
+
         
     </div>
 
@@ -292,7 +296,37 @@ h1 {
         console.error('Erreur:', error);
     });
 }
-   
+function extraireExcel() {
+    var data = [
+        ["Titre du Projet", "Nom Binôme 1",  "Nom Binôme 2",     "État"]
+        // Ajoutez ici les données de votre tableau
+    ];
+
+    var tableRows = document.querySelectorAll('.table-data');
+
+    tableRows.forEach(function(row) {
+        var rowData = [
+            row.cells[6].innerText, // Titre du Projet
+            row.cells[0].innerText, // Nom Binôme 1
+            
+            row.cells[1].innerText, // Nom Binôme 2
+            
+            "" // État
+        ];
+        data.push(rowData);
+    });
+
+    var today = new Date();
+    var dateStr = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() +
+        " (" + today.getHours() + ":" + today.getMinutes() + ")";
+
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.aoa_to_sheet(data);
+
+    XLSX.utils.book_append_sheet(wb, ws, "Liste PFE (" + dateStr + ")");
+    XLSX.writeFile(wb, "Liste PFE (" + dateStr + ").xlsx");
+}
+
 
         <?php if(isset($emailEnvoye) && $emailEnvoye): ?>
         alert("E-mail de refus envoyé avec succès");

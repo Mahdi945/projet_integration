@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Forget Password</title>
+    <title>Mot de passe oublié</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,11 +62,11 @@
 
 <body>
     <div class="container">
-        <h1>Forget Password</h1>
+        <h1>Mot de passe oublié</h1>
         <form action="../model/forget.php" method="POST">
-            <label for="email">Enter your email address:</label><br>
+            <label for="email">Entrez votre adresse e-mail :</label><br>
             <input type="email" id="email" name="email" required><br><br>
-            <button type="submit">Reset Password</button>
+            <button type="submit">Réinitialiser le mot de passe</button>
         </form>
     </div>
 </body>

@@ -73,7 +73,7 @@ include('../config.php');
       <div class="signin-signup">
         <form action="../model/login.php" method="POST" class="sign-in-form">
             
-          <h2 class="title">Sign in</h2>
+          <h2 class="title">Se Connecter</h2>
           <?php if(isset($_GET['error'])){ ?>
     		<div class="alert alert-danger" role="alert">
 			  <?php echo $_GET['error']; ?>
@@ -85,27 +85,13 @@ include('../config.php');
           </div>
           <div class="input-field">
             <i class="fas fa-lock"></i>
-            <input type="password" class="form-control"name="pass" placeholder="Password">
+            <input type="password" class="form-control"name="pass" placeholder="Mot De Passe">
           </div>
           <div class="Forget-Pass">
-          <a href="../view/forget.php" class="Forget">Forget Password ?</a></div>
+          <a href="../view/forget.php" class="Forget">Mot De passe oublié ?</a></div>
           
-          <button type="submit" class="btn solid">  Login  </button>
-          <p class="social-text">Or Sign in with social platforms</p>
-          <div class="social-media">
-            <a href="#" class="social-icon">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="social-icon">
-              <i class="fab fa-twitter"></i>
-            </a>
-            <a href="#" class="social-icon">
-              <i class="fab fa-google"></i>
-            </a>
-            <a href="#" class="social-icon">
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-          </div>
+          <button type="submit" class="btn solid">  Se Connecter </button>
+          
         </form>
       </div>
     </div>
@@ -113,13 +99,13 @@ include('../config.php');
     <div class="panels-container">
       <div class="panel left-panel">
         <div class="content">
-          <h3>New here ?</h3>
+          <h3>Nouveau ici ?</h3>  
           <p>
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
             ex ratione. Aliquid!
           </p>
           <a href="../view/signup.php" class="btn transparent" id="sign-in-btn" style="padding:10px 20px;text-decoration:none">
-          SignUp
+          Inscrption
           </a>
         </div>
         <img src="img/log.svg" class="image" alt="" />
