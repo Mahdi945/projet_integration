@@ -65,16 +65,32 @@ h1 {
 }
 
 .table th, .table td {
-    padding: 4px; /* Réduire la taille du padding */
+    padding: 8px; /* Augmenter la taille du padding */
     border: 1px solid #ddd;
-    max-width: 100px; /* Largeur maximale des cellules */
-    white-space: nowrap; /* Empêcher le texte de se retourner à la ligne */
-    overflow: hidden; /* Cacher le contenu qui dépasse */
-    text-overflow: ellipsis; /* Afficher des points de suspension (...) pour indiquer un contenu coupé */
+    text-align: center; /* Centrer le texte dans les cellules */
 }
 
 .table th {
     background-color: #f5f5f5;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Couleur de fond alternative pour les lignes */
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5),
+.table th:nth-child(6),
+.table td:nth-child(6) {
+    display: none;
+}
+
+.etat-column {
+    text-align: center;
+}
+
+.etat-column i {
+    cursor: pointer;
 }
 
 .close-icon {
@@ -114,6 +130,12 @@ h1 {
     height: 300px;
     width: 400px;
 }
+
+.fa-times-circle {
+    color: red;
+}
+
+
     </style>
 </head>
 
@@ -150,6 +172,7 @@ h1 {
                         <th>Encadreur ISET</th>
                         <th>Fiche</th>
                         <th>Décision</th>
+                        <th>État</th>
                     </tr>
                 </thead>
                 <tbody>";
@@ -168,6 +191,7 @@ h1 {
                     echo "<td>" . (isset($par['fiche']) ? $par['fiche'] : '') . "</td>";
                     echo "<td><button type='button' class='btn' onclick='validerProjet(this)'>Valider</button></td>";
                     echo "<td><button type='button' class='btn' onclick='showRefusForm(this)'>Refuser</button></td>";
+                    echo "<td><i id='checkIcon' class='fas fa-check' style='color: green; display: none;'></i><i id='crossIcon' class='fas fa-times' style='color: red; display: none;'></i></td>"; // Nouvelle colonne État
                     echo "</tr>";
                 }
                 
@@ -188,6 +212,8 @@ h1 {
                         <th>Encadreur ISET</th>
                         <th>Fiche</th>
                         <th colspan='2' class='text-center'>Decision</th>
+                        <th>État</th>
+                        
                        
                     </tr>
                 </thead>
@@ -207,6 +233,7 @@ h1 {
                     echo "<td>" . (isset($par[4]) ? $par[4] : '') . "</td>"; // Vérifie si la clé existe
                     echo "<td><button type='button' class='btn' onclick='validerProjet(this)' >Valider</button></td>";
                     echo "<td><button type='button' class='btn' onclick='showRefusForm(this)'>Refuser</button></td>";
+                    echo "<td><i id='checkIcon' class='fas fa-check' style='color: green; display: none;'></i><i class='fas fa-times' style='color: red; display: none;'></i></td>"; // Nouvelle colonne État
                     echo "</tr>";
                 }
                 echo "</tbody></table>";
@@ -229,111 +256,176 @@ h1 {
 
         
     </div>
-
     <script>
-        function showRefusForm(button) {
-            var idProjet = button.parentNode.parentNode.querySelector('td:first-child').innerText;
-            var emailEtud1 = button.parentNode.parentNode.querySelector('td:nth-child(5)').innerText;
-            var emailEtud2 = button.parentNode.parentNode.querySelector('td:nth-child(6)').innerText;
+    function showRefusForm(button) {
+        var idProjet = button.parentNode.parentNode.querySelector('td:first-child').innerText;
+        var emailEtud1 = button.parentNode.parentNode.querySelector('td:nth-child(5)').innerText;
+        var emailEtud2 = button.parentNode.parentNode.querySelector('td:nth-child(6)').innerText;
 
-            document.getElementById("idProjetRefus").value = idProjet;
-            document.getElementById("emailEtud1").value = emailEtud1;
-            document.getElementById("emailEtud2").value = emailEtud2;
+        document.getElementById("idProjetRefus").value = idProjet;
+        document.getElementById("emailEtud1").value = emailEtud1;
+        document.getElementById("emailEtud2").value = emailEtud2;
 
-            document.getElementById("refusForm").style.display = "block";
-        }
+        document.getElementById("refusForm").style.display = "block";
 
-        function closeRefusForm() {
-            document.getElementById("refusForm").style.display = "none";
+        var croixIcon = button.parentNode.parentNode.querySelector('.fa-times');
+        if (croixIcon) {
+            croixIcon.style.display = "inline"; // Afficher l'icône de croix rouge
         }
-       
-     function afficherMessageValidation() {
-            alert("Étudiants validés avec succès !");
-        }
-    function validerProjet(button) {
-    var emailEtud1 = button.parentElement.parentElement.cells[4].innerText;
-    var emailEtud2 = button.parentElement.parentElement.cells[5].innerText;
-
-    // Envoyer un e-mail de validation aux adresses e-mail des deux étudiants
-    var formData = new FormData();
-    formData.append('email_etud1', emailEtud1);
-    formData.append('email_etud2', emailEtud2);
-    formData.append('avis', 'valider');
-
-    fetch('../controller/voirformulaire.php', {
-        method: 'POST',
-        body: formData
-    })
-    
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Erreur lors de la requête');
-        }
-        return response.json();
-    })  
-    .then(data => {
-        if (data.success) {
-             afficherMessageValidation();
-        }
-    })
-    .then(data => {
-    if (data.success) {
-        // Afficher le message de validation
-        var validationMessage = document.getElementById('validationMessage');
-        validationMessage.style.display = 'block';
-        afficherMessageValidation();
-        // Rediriger après 5 secondes
-        setTimeout(function() {
-            window.location.href = '../view/loginEtudiant.php';
-        }, 5000);
-    } else {
-        throw new Error('Erreur lors de la validation');
     }
-})
 
-   
-    .catch(error => {
-        console.error('Erreur:', error);
-    });
-}
-function extraireExcel() {
-    var data = [
-        ["Titre du Projet", "Nom Binôme 1",  "Nom Binôme 2",     "État"]
-        // Ajoutez ici les données de votre tableau
-    ];
+    function closeRefusForm() {
+        document.getElementById("refusForm").style.display = "none";
+    }
 
-    var tableRows = document.querySelectorAll('.table-data');
-
-    tableRows.forEach(function(row) {
-        var rowData = [
-            row.cells[6].innerText, // Titre du Projet
-            row.cells[0].innerText, // Nom Binôme 1
-            
-            row.cells[1].innerText, // Nom Binôme 2
-            
-            "" // État
-        ];
-        data.push(rowData);
-    });
-
-    var today = new Date();
-    var dateStr = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() +
-        " (" + today.getHours() + ":" + today.getMinutes() + ")";
-
-    var wb = XLSX.utils.book_new();
-    var ws = XLSX.utils.aoa_to_sheet(data);
-
-    XLSX.utils.book_append_sheet(wb, ws, "Liste PFE (" + dateStr + ")");
-    XLSX.writeFile(wb, "Liste PFE (" + dateStr + ").xlsx");
-}
-
-
-        <?php if(isset($emailEnvoye) && $emailEnvoye): ?>
+    function afficherMessageRefusEnvoye() {
         alert("E-mail de refus envoyé avec succès");
-        <?php endif; ?>
-        
-        
-    </script>
+        closeRefusForm();
+    }
+
+    function afficherMessageValidation() {
+        alert("Étudiants validés avec succès !");
+    }
+
+    function validerProjet(button) {
+        var emailEtud1 = button.parentElement.parentElement.cells[4].innerText;
+        var emailEtud2 = button.parentElement.parentElement.cells[5].innerText;
+
+        // Envoyer un e-mail de validation aux adresses e-mail des deux étudiants
+        var formData = new FormData();
+        formData.append('email_etud1', emailEtud1);
+        formData.append('email_etud2', emailEtud2);
+        formData.append('avis', 'valider');
+
+        fetch('../controller/voirformulaire.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la requête');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Afficher l'icône de check vert
+                    var row = button.parentElement.parentElement;
+                    var etatCell = row.cells[row.cells.length - 1];
+                    var checkIcon = etatCell.querySelector('.fa-check');
+                    var crossIcon = etatCell.querySelector('.fa-times');
+
+                    afficherMessageValidation();
+
+                    if (!checkIcon) {
+                        checkIcon = document.createElement('i');
+                        checkIcon.classList.add('fas', 'fa-check');
+                        checkIcon.style.color = 'green';
+                        etatCell.appendChild(checkIcon);
+                    }
+
+                    checkIcon.style.display = 'inline';
+
+                    if (crossIcon) {
+                        crossIcon.style.display = 'none';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+    }
+
+    function refuserProjet(button) {
+        var idProjet = button.parentNode.parentNode.querySelector('td:first-child').innerText;
+
+        var formData = new FormData();
+        formData.append('id_projet', idProjet);
+        formData.append('avis', 'refuser');
+
+        fetch('../controller/voirformulaire.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la requête');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Afficher l'icône de croix rouge
+                    var row = button.parentElement.parentElement;
+                    var etatCell = row.cells[row.cells.length - 1];
+                    var checkIcon = etatCell.querySelector('.fa-check');
+                    var crossIcon = etatCell.querySelector('.fa-times');
+
+                    afficherMessageRefusEnvoye();
+
+                    if (!crossIcon) {
+                        crossIcon = document.createElement('i');
+                        crossIcon.classList.add('fas', 'fa-times');
+                        crossIcon.style.color = 'red';
+                        etatCell.appendChild(crossIcon);
+                    }
+
+                    crossIcon.style.display = 'inline';
+
+                    if (checkIcon) {
+                        checkIcon.style.display = 'none';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+    }
+
+    function extraireExcel() {
+        var data = [
+            ["Titre du Projet", "Nom Binôme 1", "Nom Binôme 2", "État"]
+        ];
+
+        var tableRows = document.querySelectorAll('.table-data');
+
+        tableRows.forEach(function (row) {
+            var rowData = [
+                row.cells[6].innerText, // Titre du Projet
+                row.cells[0].innerText, // Nom Binôme 1
+                row.cells[1].innerText, // Nom Binôme 2
+                getEtat(row) // État
+            ];
+            data.push(rowData);
+        });
+
+        var today = new Date();
+        var dateStr = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() +
+            " (" + today.getHours() + ":" + today.getMinutes() + ")";
+
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.aoa_to_sheet(data);
+
+        XLSX.utils.book_append_sheet(wb, ws, "Liste PFE (" + dateStr + ")");
+        XLSX.writeFile(wb, "Liste PFE (" + dateStr + ").xlsx");
+    }
+
+    function getEtat(row) {
+        var etatCell = row.cells[row.cells.length - 1];
+        if (etatCell.querySelector('.fa-check')) {
+            return "Validé";
+        } else if (etatCell.querySelector('.fa-times')) {
+            return "Refusé";
+        } else {
+            return "En cours";
+        }
+    }
+
+    <?php if(isset($emailEnvoye) && $emailEnvoye): ?>
+    alert("E-mail de refus envoyé avec succès");
+    <?php endif; ?> 
+</script>
+
 </body>
 
 </html>

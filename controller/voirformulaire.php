@@ -84,6 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['avis']) && $_POST['avi
         $mail->send();
 
         $emailEnvoye = true; // Définir la variable à true après avoir envoyé l'e-mail
+       
         
     } catch (Exception $e) {
         echo "Erreur lors de l'envoi de l'e-mail : {$mail->ErrorInfo}";
