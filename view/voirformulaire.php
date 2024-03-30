@@ -171,7 +171,7 @@ h1 {
                         <th>Encadreur Entreprise</th>
                         <th>Encadreur ISET</th>
                         <th>Fiche</th>
-                        <th>Décision</th>
+                        <th colspan='2' class='text-center'>Decision</th>
                         <th>État</th>
                     </tr>
                 </thead>
