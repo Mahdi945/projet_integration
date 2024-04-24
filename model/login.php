@@ -25,7 +25,7 @@ if(isset($_POST['uname']) && isset($_POST['pass'])){
         if ($stmtParticipant->rowCount() == 1) {
             $etudiant = $stmtParticipant->fetch();
             $password = $etudiant['password'];
-            if (password_verify($pass, $password)) {
+            if ($password === $pass)  {
                 $_SESSION['id'] = $participant['id'];
                 $_SESSION['username'] = $participant['nom_p'];
                 // Redirect to homeparticipant.php for participants
@@ -45,7 +45,7 @@ if(isset($_POST['uname']) && isset($_POST['pass'])){
         if ($stmtAdmin->rowCount() == 1) {
             $admin = $stmtAdmin->fetch();
             $password = $admin['password'];
-            if (password_verify($pass, $password)) {
+            if ($password === $pass)  {
                 $_SESSION['admin_id'] = $admin['id'];
                 $_SESSION['admin_name'] = $admin['nom_a'];
                 // Redirect to homeadmin.php for admins
@@ -53,7 +53,7 @@ if(isset($_POST['uname']) && isset($_POST['pass'])){
                 exit;
             } else {
                 // Mot de passe incorrect, rediriger vers la même page
-                header("Location: ../view/loginEtudiant.php?error=Invalid password");
+                header("Location: ../view/loginProfesseur.php?error=Invalid password");
                 exit;
             }
         }

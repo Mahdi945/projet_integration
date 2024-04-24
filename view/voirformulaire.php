@@ -171,7 +171,7 @@ h1 {
                         <th>Encadreur Entreprise</th>
                         <th>Encadreur ISET</th>
                         <th>Fiche</th>
-                        <th>Décision</th>
+                        <th colspan='2' class='text-center'>Decision</th>
                         <th>État</th>
                     </tr>
                 </thead>
@@ -244,7 +244,7 @@ h1 {
         <div id="refusForm" style="display: none;">
             <span class="close-icon" onclick="closeRefusForm()"><i class="fas fa-times"></i></span>
             <h2>Raison de refus</h2>
-            <form action="" method="post">
+            <form action="../controller/voirformulaire.php" method="post">
                 <input type="hidden" id="idProjetRefus" name="id_projet">
                 <input type="hidden" id="emailEtud1" name="email_etud1">
                 <input type="hidden" id="emailEtud2" name="email_etud2">
@@ -257,6 +257,82 @@ h1 {
         
     </div>
     <script>
+    // Fonction pour afficher les icônes de validation et de refus en fonction de l'état enregistré
+    function afficherEtatIcones() {
+        var tableRows = document.querySelectorAll('.table-data');
+
+        tableRows.forEach(function(row) {
+            var etatCell = row.cells[row.cells.length - 1];
+            var etat = localStorage.getItem('etat_' + row.cells[0].innerText); // Utilisez une clé unique pour chaque ligne
+            if (etat === 'validerr') {
+                var checkIcon = document.createElement('i');
+                checkIcon.classList.add('fas', 'fa-check');
+                checkIcon.style.color = 'green';
+                etatCell.appendChild(checkIcon);
+            } else if (etat === 'refus') {
+                var crossIcon = document.createElement('i');
+                crossIcon.classList.add('fas', 'fa-times');
+                crossIcon.style.color = 'red';
+                etatCell.appendChild(crossIcon);
+            }
+        });
+    }
+
+    // Appel de la fonction au chargement de la page
+   
+    window.addEventListener('load', afficherEtatIcones);
+
+function refuserProjet(button) {
+    var idProjet = button.parentNode.parentNode.querySelector('td:first-child').innerText;
+
+    var formData = new FormData();
+    formData.append('id_projet', idProjet);
+    formData.append('avis', 'refus');
+
+    fetch('../controller/voirformulaire.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la requête');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Afficher l'icône de croix rouge
+                var row = button.parentElement.parentElement;
+                var etatCell = row.cells[row.cells.length - 1];
+                var checkIcon = etatCell.querySelector('.fa-check');
+                var crossIcon = etatCell.querySelector('.fa-times');
+
+                afficherMessageRefusEnvoye();
+
+                if (!crossIcon) {
+                    crossIcon = document.createElement('i');
+                    crossIcon.classList.add('fas', 'fa-times');
+                    crossIcon.style.color = 'red';
+                    etatCell.appendChild(crossIcon);
+                }
+
+                crossIcon.style.display = 'inline';
+
+                if (checkIcon) {
+                    checkIcon.style.display = 'none';
+                }
+
+                // Enregistrement de l'état de refus dans le stockage local
+                localStorage.setItem('etat_' + row.cells[0].innerText, 'refus');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+        });
+}
+
+// Appelez cette fonction pour afficher les icônes de validation et de refus lorsque vous le souhaitez
+
     function showRefusForm(button) {
         var idProjet = button.parentNode.parentNode.querySelector('td:first-child').innerText;
         var emailEtud1 = button.parentNode.parentNode.querySelector('td:nth-child(5)').innerText;
@@ -280,7 +356,7 @@ h1 {
 
     function afficherMessageRefusEnvoye() {
         alert("E-mail de refus envoyé avec succès");
-        closeRefusForm();
+        
     }
 
     function afficherMessageValidation() {
@@ -329,6 +405,9 @@ h1 {
                     if (crossIcon) {
                         crossIcon.style.display = 'none';
                     }
+
+                    // Enregistrement de l'état de validation dans le stockage local
+                    localStorage.setItem('etat_' + row.cells[0].innerText, 'validerr');
                 }
             })
             .catch(error => {
@@ -336,60 +415,16 @@ h1 {
             });
     }
 
-    function refuserProjet(button) {
-        var idProjet = button.parentNode.parentNode.querySelector('td:first-child').innerText;
-
-        var formData = new FormData();
-        formData.append('id_projet', idProjet);
-        formData.append('avis', 'refuser');
-
-        fetch('../controller/voirformulaire.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la requête');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Afficher l'icône de croix rouge
-                    var row = button.parentElement.parentElement;
-                    var etatCell = row.cells[row.cells.length - 1];
-                    var checkIcon = etatCell.querySelector('.fa-check');
-                    var crossIcon = etatCell.querySelector('.fa-times');
-
-                    afficherMessageRefusEnvoye();
-
-                    if (!crossIcon) {
-                        crossIcon = document.createElement('i');
-                        crossIcon.classList.add('fas', 'fa-times');
-                        crossIcon.style.color = 'red';
-                        etatCell.appendChild(crossIcon);
-                    }
-
-                    crossIcon.style.display = 'inline';
-
-                    if (checkIcon) {
-                        checkIcon.style.display = 'none';
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-            });
-    }
+    
 
     function extraireExcel() {
         var data = [
-            ["Titre du Projet", "Nom Binôme 1", "Nom Binôme 2", "État"]
+            ["Titre du Projet", "Nom Etudiant 1", "Nom Etudiant 2", "État"]
         ];
 
         var tableRows = document.querySelectorAll('.table-data');
 
-        tableRows.forEach(function (row) {
+        tableRows.forEach(function(row) {
             var rowData = [
                 row.cells[6].innerText, // Titre du Projet
                 row.cells[0].innerText, // Nom Binôme 1
@@ -410,22 +445,24 @@ h1 {
         XLSX.writeFile(wb, "Liste PFE (" + dateStr + ").xlsx");
     }
 
-    function getEtat(row) {
-        var etatCell = row.cells[row.cells.length - 1];
-        if (etatCell.querySelector('.fa-check')) {
-            return "Validé";
-        } else if (etatCell.querySelector('.fa-times')) {
-            return "Refusé";
-        } else {
-            return "En cours";
-        }
+   function getEtat(row) {
+    var etatCell = row.cells[row.cells.length - 1];
+    var checkIcon = etatCell.querySelector('.fa-check');
+    var crossIcon = etatCell.querySelector('.fa-times');
+
+    if (checkIcon && getComputedStyle(checkIcon).display !== 'none') {
+        return "Validé";
+    } else if (crossIcon && getComputedStyle(crossIcon).display !== 'none') {
+        return "Refusé";
+    } else {
+        return "En cours";
     }
+}
 
     <?php if(isset($emailEnvoye) && $emailEnvoye): ?>
     alert("E-mail de refus envoyé avec succès");
-    <?php endif; ?> 
+    <?php endif; ?>
 </script>
-
 </body>
 
 </html>
