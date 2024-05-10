@@ -8,9 +8,10 @@ class Projet
     private $fiche;
     private $cin_etudiant1;
     private $cin_etudiant2;
+    private $etat;
 
     // Constructor
-    function __construct($titre, $encadreur_iset, $encadreur_entreprise, $nom_entreprise, $fiche, $cin_etudiant1, $cin_etudiant2)
+    function __construct($titre, $encadreur_iset, $encadreur_entreprise, $nom_entreprise, $fiche, $cin_etudiant1, $cin_etudiant2, $etat)
     {
         $this->titre = $titre;
         $this->encadreur_iset = $encadreur_iset;
@@ -19,9 +20,10 @@ class Projet
         $this->fiche = $fiche;
         $this->cin_etudiant1 = $cin_etudiant1;
         $this->cin_etudiant2 = $cin_etudiant2;
+        $this->etat = $etat;
     }
 
-    // Getter methods if needed
+    // Getter methods
     public function getTitre()
     {
         return $this->titre;
@@ -55,6 +57,17 @@ class Projet
     public function getCinEtudiant2()
     {
         return $this->cin_etudiant2;
+    }
+
+    public function getEtat()
+    {
+        return $this->etat;
+    }
+
+    // Setter method
+    public function setEtat($etat)
+    {
+        $this->etat = $etat;
     }
 }
 ?>

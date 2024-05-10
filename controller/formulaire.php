@@ -17,7 +17,7 @@ else {
 if(isset($_POST['etudiant1_nom']) && isset($_POST['etudiant1_groupe']) && isset($_POST['etudiant1_email']) && isset($_POST['etudiant2_groupe']) 
 && isset($_POST['etudiant2_email']) && isset($_POST['etudiant2_nom']) && isset($_POST['titre_projet'])
 && isset($_POST['encadreur_iset']) && isset($_POST['nom_entreprise']) && isset($_POST['encadreur_entreprise'])
-&& isset($_POST['etudiant1_cin']) && isset($_POST['etudiant2_cin']) && isset($_POST['fichier_pfe'])) {
+&& isset($_POST['etudiant1_cin']) && isset($_POST['etudiant2_cin']) && isset($_POST['fiche'])) {
     $etudiant1_nom = $_POST['etudiant1_nom'];
     $etudiant1_groupe = $_POST['etudiant1_groupe'];
     $email_etudiant1 = $_POST['etudiant1_email'];
@@ -28,10 +28,10 @@ if(isset($_POST['etudiant1_nom']) && isset($_POST['etudiant1_groupe']) && isset(
     $encadreur_iset = $_POST['encadreur_iset'];
     $nom_entreprise = $_POST['nom_entreprise'];
     $encadreur_entreprise = $_POST['encadreur_entreprise'];
-    $fiche = $_POST['fichier_pfe'];
+    $fiche = $_POST['fiche'];
     $cin_etudiant2 = $_POST['etudiant2_cin'];
     $cin_etudiant1 = $_POST['etudiant1_cin'];
-
+    
     try {
         $crud_projet = new crud_projet(); // Instanciation de l'objet CRUD pour le projet
         $addprojet = $crud_projet->remplit_projet($titre_projet, $encadreur_iset, $encadreur_entreprise, $nom_entreprise, $fiche, $cin_etudiant1, $cin_etudiant2);

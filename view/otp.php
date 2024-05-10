@@ -1,6 +1,10 @@
-<?php include('../config.php'); ?>
+<?php
+session_start();
+include('../config.php');
+?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -69,32 +73,14 @@
 
 <body>
   <div class="container">
-    <form action="../controller/resetPassword.php" method="POST">
+    <form action="../controller/otpController.php" method="POST">
       <div class="input-field">
         <i class="fas fa-lock"></i>
-        <input type="password" name="newPassword" id="newPassword" placeholder="Entrez le nouveau mot de passe" />
+        <input type="text" name="otp" placeholder="Entrez le code OTP" />
       </div>
-      <div class="input-field">
-        <i class="fas fa-lock"></i>
-        <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirmez le nouveau mot de passe" />
-      </div>
-      <button type="submit" class="btn solid" onclick="return validatePassword()">Réinitialiser le mot de passe</button>
+      <button type="submit" class="btn solid">Réinitialiser le mot de passe</button>
     </form>
   </div>
-
-  <script>
-    function validatePassword() {
-      var newPassword = document.getElementById('newPassword').value;
-      var confirmPassword = document.getElementById('confirmPassword').value;
-
-      if (newPassword !== confirmPassword) {
-        alert('Les mots de passe ne correspondent pas.');
-        return false;
-      }
-
-      return true;
-    }
-  </script>
 </body>
-</html>
 
+</html>

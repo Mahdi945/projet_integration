@@ -70,7 +70,7 @@ if ($rowCount > 0) {
 
 ?>
 <h1>Inscription PFE <?php echo get_annee_universitaire(); ?></h1>
-<form action="../controller/formulaire.php" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir soumettre ce formulaire ?');">
+<form action="../controller/formulaire.php" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir soumettre ce formulaire ?');" enctype="multipart/form-data">
     <label for="etudiant1_nom">Étudiant 1* :</label>
     <input type="text" id="etudiant1_nom" name="etudiant1_nom" value="<?php echo $row['nom_prenom_etud1']; ?>" placeholder="Nom et Prénom" required><br>
     <label for="etudiant1_groupe">Groupe Étudiant 1* :</label>
@@ -109,7 +109,7 @@ if ($rowCount > 0) {
         <label for="encadreur_entreprise">Encadreur entreprise* :</label>
         <input type="text" id="encadreur_entreprise" name="encadreur_entreprise" placeholder="Encadreur entreprise"  value="<?php echo $row['encadreur_entreprise']; ?>"required><br>
         <label for="fichier_pfe">Importer le fichier PFE :</label>
-        <input type="file" id="fichier_pfe" name="fichier_pfe" value="<?php echo $row['fiche']; ?>"><br> <br>
+        <input type="file" id="fiche" name="fiche" value="<?php echo $row['fiche']; ?>"><br> <br>
     
     <input type="submit" name="submit" value="Soumettre">
     <input type="submit" name="submit" value="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ?');">
@@ -155,7 +155,7 @@ if ($rowCount > 0) {
         <label for="encadreur_entreprise">Encadreur entreprise* :</label>
         <input type="text" id="encadreur_entreprise" name="encadreur_entreprise" placeholder="Encadreur entreprise" required><br>
         <label for="fichier_pfe">Importer le fichier PFE :</label>
-        <input type="file" id="fichier_pfe" name="fichier_pfe"><br> <br>
+        <input type="file" id="fiche" name="fiche"><br> <br>
         <input type="submit" name="submit" value="Soumettre">
         <input type="submit" name="submit" value="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ?');">
     </form>

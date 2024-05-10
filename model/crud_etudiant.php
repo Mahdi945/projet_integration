@@ -15,8 +15,8 @@ class crud_etudiant extends crud
                     cin_etud2 = :cin_etud2, 
                     nom_prenom_etud2 = :nom_prenom_etud2, 
                     eamil_etud2 = :email_etud2, 
-                    groupe_etud2 = :groupe_etud2
-                    WHERE cin_etudiant1 = :cin_etudiant1";
+                    groupe_etud2 = :groupe_etud2 
+                    WHERE cin_etudiant1 = :cin_etudiant1"; 
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':nom_prenom_etud1', $nom_prenom_etud1);
@@ -53,5 +53,56 @@ class crud_etudiant extends crud
             throw new Exception("Une erreur s'est produite lors de l'inscription: " . $e->getMessage());
         }
     }
+    function delete_etud($cin_etudiant1)
+    {
+        try {
+            $sql = "DELETE FROM etudiant WHERE cin_etudiant1 = :cin_etudiant1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':cin_etudiant1', $cin_etudiant1);
+            $stmt->execute();
+        } catch (PDOException | Exception $e) {
+            throw new Exception("Une erreur s'est produite lors de la suppression de l'étudiant: " . $e->getMessage());
+        }
+    }
+    function login($uname, $pass) {
+        try {
+            $sql = "SELECT * FROM etudiant WHERE cin_etudiant1 = ?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$uname]);
+            $etudiant = $stmt->fetch();
+
+            if ($etudiant && password_verify($pass, $etudiant['password'])) {
+                return $etudiant;
+            }
+
+            return false;
+        } catch (PDOException $e) {
+            throw new Exception("Une erreur s'est produite lors de la connexion: " . $e->getMessage());
+        }
+    }
+    function emailExists($email) {
+        $sql = "SELECT COUNT(*) FROM etudiant WHERE email_etud1 = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $count = $stmt->fetchColumn();
+        return $count > 0;
+    }
+    
+    function reinitialiserMotDePasse($email, $nouveauMotDePasse) {
+        try {
+            $options = [
+                'cost' => 12,
+            ];
+            $hashedPassword = password_hash($nouveauMotDePasse, PASSWORD_DEFAULT, $options);
+            $sql = "UPDATE etudiant SET password = :password WHERE email_etud1 = :email";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute(['password' => $hashedPassword, 'email' => $email]);
+            return true;
+        } catch (PDOException $e) {
+            throw new Exception("Une erreur s'est produite lors de la réinitialisation du mot de passe: " . $e->getMessage());
+        }
+    }
+    
+    
 }
 ?>
