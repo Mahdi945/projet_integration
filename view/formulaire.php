@@ -3,6 +3,7 @@ require_once '../config.php';
 $connexion = new connexion();
 $pdo = $connexion->getConnexion();
 $cin = isset($_GET['cin']) ? $_GET['cin'] : null; 
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,7 +86,7 @@ if ($rowCount > 0) {
         <label for="email_etudiant1">Email Étudiant 1*</label>
         <input type="email" name="etudiant1_email" value="<?php echo $row['email_etud1']; ?>"id="etudiant1_email" required><br>
         <label for="email_etudiant2">CIN Étudiant1</label>
-        <input type="text" name="etudiant1_cin" value="<?php echo $row['cin_etudiant1']; ?>" id="etudiant2_cin" ><br>
+        <input type="text" name="etudiant1_cin"  value="<?php echo $row['cin_etudiant1']; ?>" id="etudiant2_cin" ><br>
         <label for="etudiant2_nom">Étudiant 2 :<label>
         <input type="text" id="etudiant2_nom" name="etudiant2_nom" placeholder="Nom" value="<?php echo $row['nom_prenom_etud2']; ?>"><br>
         <label for="etudiant2_groupe">Groupe Étudiant 2 :</label>
@@ -99,7 +100,7 @@ if ($rowCount > 0) {
         <label for="email_etudiant2">Email Étudiant 2</label>
         <input type="email" name="etudiant2_email" id="etudiant2_email" value="<?php echo $row['eamil_etud2']; ?>"><br>
         <label for="email_etudiant2">CIN Étudiant2</label>
-        <input type="text" name="etudiant2_cin" id="etudiant2_cin" value="<?php echo $row['cin_etud2']; ?>"><br>
+        <input type="text" name="etudiant2_cin" id="etudiant2_cin"   value="<?php echo $row['cin_etud2']; ?>"><br>
         <label for="titre_projet">Titre du projet* :</label>
         <input type="text" id="titre_projet" name="titre_projet" placeholder="Titre du projet" required onkeyup="capitalizeFirstLetter(this)"value="<?php echo $row['titre']; ?>"><br>
         <label for="encadreur_iset">Encadreur ISET* :</label>
@@ -109,15 +110,17 @@ if ($rowCount > 0) {
         <label for="encadreur_entreprise">Encadreur entreprise* :</label>
         <input type="text" id="encadreur_entreprise" name="encadreur_entreprise" placeholder="Encadreur entreprise"  value="<?php echo $row['encadreur_entreprise']; ?>"required><br>
         <label for="fichier_pfe">Importer le fichier PFE :</label>
-        <input type="file" id="fiche" name="fiche" value="<?php echo $row['fiche']; ?>"><br> <br>
+        <input type="file" id="fiche" name="fiche_pfe"  accept=".pdf" value="<?php echo $row['fiche']; ?>" required>
+        <p style="font-weight: normal; font-size: 0.8em;">Seuls les fichiers .pdf sont acceptés.</p><br>
     
     <input type="submit" name="submit" value="Soumettre">
     <input type="submit" name="submit" value="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ?');">
+    <p>Le formulaire est modifiable jusqu'au 20/05/2024 21:00.</p>
 </form>
 <?php 
 }else{ ?>
     <h1>Inscription PFE <?php echo get_annee_universitaire(); ?></h1>
-    <form action="../controller/formulaire.php" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir soumettre ce formulaire ?');">
+    <form action="../controller/formulaire.php" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir soumettre ce formulaire ?');" enctype="multipart/form-data">
         <label for="etudiant1_nom">Étudiant 1* :</label>
         <input type="text" id="etudiant1_nom" name="etudiant1_nom" placeholder="Nom et Prénom" required><br>
         <label for="etudiant1_groupe">Groupe Étudiant 1* :</label>
@@ -131,7 +134,7 @@ if ($rowCount > 0) {
         <label for="email_etudiant1">Email Étudiant 1*</label>
         <input type="email" name="etudiant1_email" id="etudiant1_email" required><br>
         <label for="email_etudiant2">CIN Étudiant1</label>
-        <input type="text" name="etudiant1_cin" id="etudiant2_cin" ><br>
+        <input type="text" name="etudiant1_cin" id="etudiant2_cin" pattern="\d{8}"><br>
         <label for="etudiant2_nom">Étudiant 2 :<label>
         <input type="text" id="etudiant2_nom" name="etudiant2_nom" placeholder="Nom"><br>
         <label for="etudiant2_groupe">Groupe Étudiant 2 :</label>
@@ -145,7 +148,7 @@ if ($rowCount > 0) {
         <label for="email_etudiant2">Email Étudiant 2</label>
         <input type="email" name="etudiant2_email" id="etudiant2_email" ><br>
         <label for="email_etudiant2">CIN Étudiant2</label>
-        <input type="text" name="etudiant2_cin" id="etudiant2_cin" ><br>
+        <input type="text" name="etudiant2_cin" id="etudiant2_cin" pattern="\d{8}" ><br>
         <label for="titre_projet">Titre du projet* :</label>
         <input type="text" id="titre_projet" name="titre_projet" placeholder="Titre du projet" required onkeyup="capitalizeFirstLetter(this)"><br>
         <label for="encadreur_iset">Encadreur ISET* :</label>
@@ -155,9 +158,12 @@ if ($rowCount > 0) {
         <label for="encadreur_entreprise">Encadreur entreprise* :</label>
         <input type="text" id="encadreur_entreprise" name="encadreur_entreprise" placeholder="Encadreur entreprise" required><br>
         <label for="fichier_pfe">Importer le fichier PFE :</label>
-        <input type="file" id="fiche" name="fiche"><br> <br>
+        <input type="file" id="fiche_pfe" name="fiche_pfe" accept=".pdf">
+        <p style="font-weight: normal; font-size: 0.8em;">Seuls les fichiers .pdf sont acceptés.</p><br>
         <input type="submit" name="submit" value="Soumettre">
+        
         <input type="submit" name="submit" value="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ?');">
+        <p>Le formulaire est modifiable jusqu'au 20/05/2024 21:00.</p>
     </form>
     <script>
         function capitalizeFirstLetter(input) {
