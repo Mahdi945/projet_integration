@@ -58,11 +58,15 @@ $cin = isset($_GET['cin']) ? $_GET['cin'] : null;
 </head>
 <body>
     <?php
-$sql = "SELECT * FROM projet JOIN etudiant ON projet.cin_etudiant1 = etudiant.cin_etudiant1 WHERE etudiant.cin_etudiant1 = ? AND etudiant.cin_etud2 IS NOT NULL LIMIT 1";
-$stmt =$pdo->prepare($sql);
-$stmt->execute([$cin]);
-$rowCount = $stmt->rowCount(); // Récupérer le nombre de lignes retournées
-
+    $sql = "SELECT * FROM projet 
+        JOIN etudiant ON (projet.cin_etudiant1 = etudiant.cin_etudiant1 OR projet.cin_etudiant1 = etudiant.cin_etud2) 
+        WHERE (etudiant.cin_etudiant1 = ? OR etudiant.cin_etud2 = ?) 
+        AND etudiant.cin_etud2 IS NOT NULL 
+        LIMIT 1";
+    $stmt =$pdo->prepare($sql);
+    $stmt->execute([$cin, $cin]);
+    $rowCount = $stmt->rowCount(); // Récupérer le nombre de lignes retournées
+    
 // Vérifier si la requête a retourné au moins une ligne
 if ($rowCount > 0) {
     $row = $stmt->fetch(PDO::FETCH_ASSOC); // Récupérer la première ligne de résultat
@@ -72,7 +76,7 @@ if ($rowCount > 0) {
 ?>
 <h1>Inscription PFE <?php echo get_annee_universitaire(); ?></h1>
 <form action="../controller/formulaire.php" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir soumettre ce formulaire ?');" enctype="multipart/form-data">
-    <label for="etudiant1_nom">Étudiant 1* :</label>
+    <label for="etudiant1_nom">Nom et Prenom (Étudiant 1)* :</label>
     <input type="text" id="etudiant1_nom" name="etudiant1_nom" value="<?php echo $row['nom_prenom_etud1']; ?>" placeholder="Nom et Prénom" required><br>
     <label for="etudiant1_groupe">Groupe Étudiant 1* :</label>
     <select id="etudiant1_groupe" name="etudiant1_groupe" required>
@@ -87,7 +91,7 @@ if ($rowCount > 0) {
         <input type="email" name="etudiant1_email" value="<?php echo $row['email_etud1']; ?>"id="etudiant1_email" required><br>
         <label for="email_etudiant2">CIN Étudiant1</label>
         <input type="text" name="etudiant1_cin"  value="<?php echo $row['cin_etudiant1']; ?>" id="etudiant2_cin" ><br>
-        <label for="etudiant2_nom">Étudiant 2 :<label>
+        <label for="etudiant2_nom">Nom et Prenom (Étudiant 2)* :<label>
         <input type="text" id="etudiant2_nom" name="etudiant2_nom" placeholder="Nom" value="<?php echo $row['nom_prenom_etud2']; ?>"><br>
         <label for="etudiant2_groupe">Groupe Étudiant 2 :</label>
         <select id="etudiant2_groupe" name="etudiant2_groupe" required>
@@ -121,7 +125,7 @@ if ($rowCount > 0) {
 }else{ ?>
     <h1>Inscription PFE <?php echo get_annee_universitaire(); ?></h1>
     <form action="../controller/formulaire.php" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir soumettre ce formulaire ?');" enctype="multipart/form-data">
-        <label for="etudiant1_nom">Étudiant 1* :</label>
+        <label for="etudiant1_nom">Nom et Prenom (Étudiant 1)* :</label>
         <input type="text" id="etudiant1_nom" name="etudiant1_nom" placeholder="Nom et Prénom" required><br>
         <label for="etudiant1_groupe">Groupe Étudiant 1* :</label>
         <select id="etudiant1_groupe" name="etudiant1_groupe" required>
@@ -135,7 +139,7 @@ if ($rowCount > 0) {
         <input type="email" name="etudiant1_email" id="etudiant1_email" required><br>
         <label for="email_etudiant2">CIN Étudiant1</label>
         <input type="text" name="etudiant1_cin" id="etudiant2_cin" pattern="\d{8}"><br>
-        <label for="etudiant2_nom">Étudiant 2 :<label>
+        <label for="etudiant2_nom">Nom et Prenom (Étudiant 2)* :<label>
         <input type="text" id="etudiant2_nom" name="etudiant2_nom" placeholder="Nom"><br>
         <label for="etudiant2_groupe">Groupe Étudiant 2 :</label>
         <select id="etudiant2_groupe" name="etudiant2_groupe">

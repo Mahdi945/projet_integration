@@ -64,11 +64,12 @@ class crud_etudiant extends crud
             throw new Exception("Une erreur s'est produite lors de la suppression de l'étudiant: " . $e->getMessage());
         }
     }
+    
     function login($uname, $pass) {
         try {
-            $sql = "SELECT * FROM etudiant WHERE cin_etudiant1 = ?";
+            $sql = "SELECT * FROM etudiant WHERE cin_etudiant1 = ? OR cin_etud2 = ?";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$uname]);
+            $stmt->execute([$uname, $uname]);
             $etudiant = $stmt->fetch();
 
             if ($etudiant && password_verify($pass, $etudiant['password'])) {
@@ -80,6 +81,7 @@ class crud_etudiant extends crud
             throw new Exception("Une erreur s'est produite lors de la connexion: " . $e->getMessage());
         }
     }
+   
     function emailExists($email) {
         $sql = "SELECT COUNT(*) FROM etudiant WHERE email_etud1 = :email";
         $stmt = $this->pdo->prepare($sql);
@@ -111,6 +113,22 @@ class crud_etudiant extends crud
         }
     }
     
+    public function loginWithRedirect($uname, $pass) {
+        $etudiant = $this->login($uname, $pass);
+    
+        if ($etudiant) {
+            if ($etudiant['etat'] == 'validé') {
+                header("Location: ../view/valider.php?cin=$uname");
+            } elseif ($etudiant['etat'] == 'refusé') {
+                header("Location: ../view/refuser.php?cin=$uname");
+            } else {
+                header("Location: ../view/formulaire.php?cin=$uname");
+            }
+            exit;
+        }
+        return false;
+    }
+
     
 }
 ?>
