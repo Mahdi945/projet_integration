@@ -49,16 +49,23 @@ class crud_projet extends crud
             throw new Exception("An error occurred while deleting project: " . $e->getMessage());
         }
     }
+   
+  
     
     function updateEtatProjet($id_projet, $etat) {
         try {
             $query = "UPDATE projet SET etat = :etat WHERE id_projet = :id_projet";
             $stmt = $this->connexion->prepare($query);
-            $stmt->execute(array(':etat' => $etat, ':id_projet' => $id_projet));
+            $stmt->execute(['etat' => $etat, 'id_projet' => $id_projet]);
             return true;
         } catch (PDOException $e) {
+            echo 'PDOException: ' . $e->getMessage();
             return false;
         }
     }
+    
+    
+   
+    
 }
 ?>

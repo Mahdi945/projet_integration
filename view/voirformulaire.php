@@ -66,7 +66,26 @@
                     echo "<td><button type='button' class='btn' onclick='validerProjet(this)'>Valider</button></td>";
                     echo "<td><button type='button' class='btn' onclick='showRefusForm(this)'>Refuser</button></td>";
                    
-                    echo "<td></i><i id='checkIcon' class='fas fa-check' style='color: green; display: none;'></i><i id='crossIcon' class='fas fa-times' style='color: red; display: none;'></i></td>"; // Nouvelle colonne État
+                    if($par['etat'] == 'validé'){
+                        echo "<td>
+                        <i class='fas fa-check' style='color: green;'></i>
+                        </td>";
+                       }
+                       else 
+                      if($par['etat'] == 'refusé'){
+                        echo "<td>
+                        <i class='fas fa-times' style='color: red;'></i>
+                        </td>";
+                       }
+                       else
+                       echo "<td><i class='fas fa-hourglass' style='color: grey;'></i></td>"; 
+    
+                         // Nouvelle colonne État
+                        
+                        
+    
+                        
+                    
                    
                     echo "</tr>";
                 }
@@ -76,7 +95,7 @@
             echo "<table class='table' id='example'>
                 <thead>
                     <tr class='table-header'>
-                        
+                    <th class='id-projet'>id projet</th>
                         <th>Nom Binôme 1</th>
                         <th>Nom Binôme 2</th>
                         <th>CIN Binôme 1</th>
@@ -97,7 +116,7 @@
                 <tbody>";
                 foreach ($l as $par) {
                     echo "<tr class='table-data'>";//$par[8] etat
-                   
+                    echo "<td class='id-projet'>" . (isset($par[0]) ? $par[0] : '') . "</td>";
                     echo "<td>" . (isset($par[10]) ? $par[10] : '') . "</td>"; // Vérifie si la clé existe
                     echo "<td>" . (isset($par[14]) ? $par[14] : '') . "</td>"; // Vérifie si la clé existe
                     echo "<td>" . (isset($par[9]) ? $par[9] : '') . "</td>"; // Vérifie si la clé existe
@@ -144,7 +163,7 @@
         <div id="refusForm" style="display: none;">
             <span class="close-icon" onclick="closeRefusForm()"><i class="fas fa-times"></i></span>
             <h2>Raison de refus</h2>
-            <form action="../controller/voirformulaire.php" method="post">
+            <form action="../controller/voirformulaire.php" method="POST">
                 <input type="hidden" id="idProjetRefus" name="id_projet">
                 <input type="hidden" id="emailEtud1" name="email_etud1">
                 <input type="hidden" id="emailEtud2" name="email_etud2">
@@ -157,6 +176,45 @@
     <script src ="../etat.js">
 </script>
 
+<script>
+    </script>
+<?php
+if ($emailEnvoye) {
+    echo "<script>
+    function updateEtatProjet(idProjet, etat) {
+        var formData = new FormData();
+        formData.append('id_projet', idProjet);
+        formData.append('etat', etat);
+
+        fetch('../controller/updateEtatProjet.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la requête');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log('Etat du projet mis à jour avec succès');
+            } else {
+                console.log('Erreur lors de la mise à jour de l\'état du projet');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error.message);
+        });
+    }
+
+    // Appeler la fonction avec les paramètres appropriés
+    updateEtatProjet('". $idProjet ."', 'refusé');
+    </script>";
+    echo "<script>alert('Email de refus envoyé avec succès');</script>";
+}
+?>
+   
 </body>
 
 </html>

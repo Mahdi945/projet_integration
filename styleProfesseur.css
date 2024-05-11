@@ -66,12 +66,19 @@ h1 {
     background-color: #f9f9f9; /* Couleur de fond alternative pour les lignes */
 }
 
-.table th:nth-child(5),
-.table td:nth-child(5),
 .table th:nth-child(6),
-.table td:nth-child(6) {
+.table td:nth-child(6),
+.table th:nth-child(7),
+.table td:nth-child(7) {
     display: none;
 }
+
+.table th:nth-child(0),
+.table td:nth-child(0)
+{
+    display: none;
+}
+.id-projet { display: none; }
 
 .etat-column {
     text-align: center;
