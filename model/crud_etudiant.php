@@ -87,19 +87,27 @@ class crud_etudiant extends crud
         $count = $stmt->fetchColumn();
         return $count > 0;
     }
-    
     function reinitialiserMotDePasse($email, $nouveauMotDePasse) {
+        echo "email2 $email" ;
         try {
             $options = [
                 'cost' => 12,
             ];
             $hashedPassword = password_hash($nouveauMotDePasse, PASSWORD_DEFAULT, $options);
+    
+            // Vérifier l'existence de l'email
+            if (!$this->emailExists($email)) {
+                throw new Exception("Email not found");
+            }
+    
+            // Réinitialiser le mot de passe
             $sql = "UPDATE etudiant SET password = :password WHERE email_etud1 = :email";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute(['password' => $hashedPassword, 'email' => $email]);
+            
             return true;
-        } catch (PDOException $e) {
-            throw new Exception("Une erreur s'est produite lors de la réinitialisation du mot de passe: " . $e->getMessage());
+        } catch (PDOException | Exception $e) {
+            throw new Exception("Error resetting password: " . $e->getMessage());
         }
     }
     

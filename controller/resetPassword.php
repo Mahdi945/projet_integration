@@ -1,5 +1,6 @@
 <?php
-include('../config.php');
+session_start();
+include "../config.php";
 include('../model/crud_etudiant.php');
 $crud_etudiant = new crud_etudiant();
 
@@ -17,8 +18,11 @@ if (isset($_POST['newPassword']) && isset($_POST['confirmPassword'])) {
         exit;
     } else {
         try {
+            
+            echo "email 0 {$_SESSION['email']} email 1 {$_SESSION['reset_email']}";
+            
             $crud_etudiant->reinitialiserMotDePasse($_SESSION['reset_email'], $newPassword);
-            unset($_SESSION['reset_email']);
+            
             header("Location: ../view/loginEtudiant.php?success=Password reset successfully");
             exit;
         } catch (Exception $e) {

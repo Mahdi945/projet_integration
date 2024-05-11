@@ -47,7 +47,7 @@ if(isset($_POST['submit']) && $_POST['submit'] === 'Supprimer') {
             echo "Le dossier d'upload n'existe pas ou n'est pas accessible en écriture.";
             exit;
         }
-
+        $filename = $etudiant1_nom . '_' . $etudiant2_nom ;
         // Check if file was uploaded without errors
         if (!is_uploaded_file($_FILES['fiche_pfe']['tmp_name'])) {
             echo "Une erreur s'est produite lors du téléchargement du fichier.";
@@ -69,7 +69,7 @@ if(isset($_POST['submit']) && $_POST['submit'] === 'Supprimer') {
 
                 $crud_etudiant = new crud_etudiant(); // Instanciation de l'objet CRUD pour les étudiants
                 $addetud = $crud_etudiant->remplit_etud($cin_etudiant1, $etudiant1_nom, $email_etudiant1, $etudiant1_groupe, $cin_etudiant2, $etudiant2_nom, $email_etudiant2, $etudiant2_groupe);
-
+                echo "<script>alert('Formulaire envoyé avec succès.');</script>";
                 header("Location: ../view/loginEtudiant.php?success=Formulaire envoyé, veuillez attendre la confirmation de l'encadrant.");
                 exit;
             } catch (Exception $e) {

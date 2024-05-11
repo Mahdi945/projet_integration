@@ -62,7 +62,7 @@
                     echo "<td>" . (isset($par['nom_entreprise']) ? $par['nom_entreprise'] : '') . "</td>";
                     echo "<td>" . (isset($par['encadreur_entreprise']) ? $par['encadreur_entreprise'] : '') . "</td>";
                     echo "<td>" . (isset($par['encadreur_iset']) ? $par['encadreur_iset'] : '') . "</td>";
-                    echo "<td>" . (isset($par['fiche']) ? $par['fiche'] : '') . "</td>";
+                    echo "<td><a href='../uploads/" . (isset($par['fiche']) ? $par['fiche'] : '') . "' download>Télécharger</a></td>";
                     echo "<td><button type='button' class='btn' onclick='validerProjet(this)'>Valider</button></td>";
                     echo "<td><button type='button' class='btn' onclick='showRefusForm(this)'>Refuser</button></td>";
                    
@@ -110,7 +110,7 @@
                     
                     echo "<td>" . (isset($par[3]) ? $par[3] : '') . "</td>"; // Vérifie si la clé existe
                     echo "<td>" . (isset($par[2]) ? $par[2] : '') . "</td>"; // Vérifie si la clé existe
-                    echo "<td>" . (isset($par[5]) ? $par[5] : '') . "</td>"; // Vérifie si la clé existe
+                    echo "<td><a href='../uploads/" . (isset($par[5]) ? $par[5] : '') . "' download>Télécharger</a></td>";
                     echo "<td><button type='button' class='btn' onclick='validerProjet(this)' >Valider</button></td>";
                     echo "<td><button type='button' class='btn' onclick='showRefusForm(this)'>Refuser</button></td>";
                     
@@ -121,7 +121,7 @@
                     </td>";
                    }
                    else 
-                   if($par[8] == 'refusé'){
+                  if($par[8] == 'refusé'){
                     echo "<td>
                     <i class='fas fa-times' style='color: red;'></i>
                     </td>";
@@ -140,7 +140,7 @@
             echo "Aucun résultat trouvé.";
         }
         ?>
-
+  
         <div id="refusForm" style="display: none;">
             <span class="close-icon" onclick="closeRefusForm()"><i class="fas fa-times"></i></span>
             <h2>Raison de refus</h2>
@@ -156,6 +156,7 @@
     </div>
     <script src ="../etat.js">
 </script>
+
 </body>
 
 </html>
