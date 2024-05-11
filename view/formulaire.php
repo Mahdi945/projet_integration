@@ -55,6 +55,18 @@ $cin = isset($_GET['cin']) ? $_GET['cin'] : null;
             background-color: #45a049;
         }
     </style>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const deadline = new Date("2024-05-20T22:06:00"); // Date limite
+        const now = new Date(); // Date actuelle
+
+        // Vérifier si la date limite est dépassée
+        if (now > deadline) {
+            alert("Vous avez dépassé la date limite.");
+            window.location.href = "../view/loginEtudiant.php";
+        }
+    });
+</script>
 </head>
 <body>
     <?php
