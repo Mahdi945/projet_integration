@@ -304,8 +304,10 @@ async function downloadPDF() {
     doc.text(`Encadreur Entreprise: ${encadreurEntreprise}`, 10, 130);
     doc.text(`Encadreur ISET: ${encadreurIset}`, 10, 140);
 
-    doc.save('etudiant_details.pdf');
+    const fileName = `${nomPrenomEtud1.replace(/ /g, '_')}_${nomPrenomEtud2.replace(/ /g, '_')}.pdf`;
+    doc.save(fileName);
 }
+
 
 
     </script>
