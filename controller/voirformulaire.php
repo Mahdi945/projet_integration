@@ -26,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         OR etudiant.cin_etud2 LIKE :search_term 
         OR etudiant.email_etud1 LIKE :search_term 
         OR etudiant.eamil_etud2 LIKE :search_term";
+        
 
         // Créer une nouvelle connexion PDO
         require_once "../config.php";

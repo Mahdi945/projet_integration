@@ -112,22 +112,8 @@ class crud_etudiant extends crud
             throw new Exception("Error resetting password: " . $e->getMessage());
         }
     }
-    
-    public function loginWithRedirect($uname, $pass) {
-        $etudiant = $this->login($uname, $pass);
-    
-        if ($etudiant) {
-            if ($etudiant['etat'] == 'validé') {
-                header("Location: ../view/valider.php?cin=$uname");
-            } elseif ($etudiant['etat'] == 'refusé') {
-                header("Location: ../view/refuser.php?cin=$uname");
-            } else {
-                header("Location: ../view/formulaire.php?cin=$uname");
-            }
-            exit;
-        }
-        return false;
-    }
+        
+
 
     
 }
