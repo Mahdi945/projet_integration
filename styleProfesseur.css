@@ -109,10 +109,13 @@ h1 {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 999;
+    width: 80%; /* Ajouter une largeur pour le formulaire */
+    max-width: 500px; /* Ajouter une largeur maximale pour le formulaire */
 }
 
 #refusForm h2 {
     margin-bottom: 10px;
+    text-align: center; /* Centrer le titre */
 }
 
 #refusForm textarea {
@@ -122,10 +125,19 @@ h1 {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    height: 300px;
-    width: 400px;
+    height: 300px; /* Ajouter une hauteur pour le textarea */
 }
 
+#refusForm button {
+    background-color: #3498db;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block; /* Faire en sorte que le bouton soit sur sa propre ligne */
+    margin: 0 auto; /* Centrer le bouton */
+}
 .fa-times-circle {
     color: red;
 }

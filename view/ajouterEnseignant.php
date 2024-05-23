@@ -1,8 +1,7 @@
 <?php
 ob_start();
-echo "<h1>Mettre à jour un enseignant</h1>";
+echo "<h1>Ajouter un enseignant</h1>";
 require_once "../model/enseignant.php";
-$crud = new enseignant();
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +14,6 @@ $crud = new enseignant();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -80,31 +78,29 @@ $crud = new enseignant();
         }
     </style>
 </head>
-<?php
-$id = $_GET['id'];
-$a = $crud->find($id);
-$nom = $a['nom_prenom'];
-$mail = $a['mail'];
-?>
+
 <body>
     <div class="container">
-        <form action="../controller/modifierens.php?id=<?php echo $id; ?>" method="post">
+        <form action="../controller/ajouterEnseignant.php" method="post">
             <div class="form-group">
                 <label for="cin">CIN :</label>
-                <input type="text" id="cin" name="cin" class="form-control" value="<?php echo $id; ?>" readonly>
+                <input type="text" id="cin" name="cin" class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="nom_prenom">Nom et Prénom :</label>
-                <input type="text" id="nom_prenom" name="nom_prenom" class="form-control" value="<?php echo $nom; ?>" readonly>
+                <input type="text" id="nom_prenom" name="nom_prenom" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="email">Nouvel Email :</label>
-                <input type="email" id="email" name="email" class="form-control" value="<?php echo $mail; ?>">
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" class="form-control" required>
             </div>
-            <button type="submit" class="btn">Modifier Email</button>
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn">Ajouter Enseignant</button>
         </form>
     </div>
 </body>
 
 </html>
-

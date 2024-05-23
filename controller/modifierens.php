@@ -1,35 +1,33 @@
 <?php
 require_once "../model/enseignant.php";
 
-$crud = new enseignant() ;
+$cin = $nom_prenom = $email = ''; // Initialisation des variables
+$crud = new enseignant(); // Initialize $crud object
 
-// les données du formulaire  ont  été modifé on reçoit via post
-//les nouvelles données  
-if (!isset($_POST['ok'])) {
-    $id= $_GET['id'];
-$ens= $crud->find($id);
+if (isset($_GET['id']) && isset($_POST['email'])) {
+    $cin = $_GET['id'];
+    $newEmail = $_POST['email'];
+
+    // Debugging: print the received data
+    var_dump($cin, $newEmail);
+
+    $crud = new enseignant();
+    $affectedRows = $crud->updateEmail($cin, $newEmail);
+
+    if ($affectedRows > 0) {
+        $message = "Enseignant modifié avec succès";
+        header("Location: ../view/accueiladmin.php?success=" . urlencode($message));
+        exit;
+    } else {
+        echo "Échec de la mise à jour de l'email.";
+    }
+} else {
+    echo "Les paramètres requis sont manquants.";
+    exit;
+}
 
 
-    
-include "../view/modifier.php";
-}?>
+require_once "../view/modifier.php";
 
- <?php   
-
-if (isset($_POST['ok'])) {
-        $cin = $_POST['id'];
-        $nomprenom = $_POST['nom'];
-        $password = $_POST['prenom'];
-        $mail= $_POST['image'];
-        
-    $res = $crud->updateens($cin, $nomprenom,$password,$mail);
-    if ($res) { ?>
-        <div class="alert alert-success" role="alert">
-        enseignant modifié avec succée
-        </div>
-        
-        <?php
-        require_once "../view/modifier.php";
    
-    }}
-?>  
+   

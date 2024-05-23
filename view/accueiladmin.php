@@ -2,7 +2,6 @@
 
 require_once '../controller/listeEnseignant.php';
 
-
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +14,6 @@ require_once '../controller/listeEnseignant.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -142,21 +140,46 @@ require_once '../controller/listeEnseignant.php';
         .fa-times-circle {
             color: red;
         }
+
+        .alert-success {
+            background-color: #42ba96;
+        }
     </style>
 </head>
 
 <body>
+<?php
+// Vérifiez si un message de succès est présent dans l'URL
+if (isset($_GET['success'])) {
+    $successMessage = $_GET['success'];
+    // Affichez le message de succès
+    echo "<div class='alert alert-success'>$successMessage</div>";
+}
+?>
+
     <div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1 style="margin: 0 auto;">Liste des enseignants</h1>
+            <a href="../index.php" class="btn btn-danger">Se déconnecter</a>
+        </div>
 
-
-    <form class="navbar-form navbar-left" role="search" method="post" action="">
-                    <div class="form-group">
-                        <input type="text"name="enseignant"  class="form-control" placeholder="nom de l'enseignant">
+        <div class="row" style="margin-top: 40px;">
+            <div class="col-md-6"> 
+                <form class="navbar-form" role="search" method="post" action="">
+                    <div class="input-group">
+                        <input type="text" name="enseignant" class="form-control" placeholder="nom de l'enseignant">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">Rechercher</button>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-default">Rechercher</button>
                 </form>
-                <?php
+            </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+            <button type="button" class="btn btn-primary" onclick="window.location.href='../view/ajouterEnseignant.php'">Ajouter Enseignant</button>
+        </div>
 
+<?php
 if (isset($_POST['enseignant'])) {
     $ens = $_POST['enseignant'];
     $t = $crud->find_enseignant($ens);
@@ -172,21 +195,26 @@ if (isset($_POST['enseignant'])) {
         <thead>
             <tr class="table-header">
                 <th>cin</th>
-            <th>nom et prenom </th>
-           
-            <th>mail</th>
-            <th></th>
-         </tr>
+                <th>nom et prenom </th>
+                <th>mail</th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
             <?php
             foreach ($t as $par) {
                 echo "<tr class='table-data'>
-               <td>$par[0]</td>
+                <td>$par[0]</td>
                 <td>$par[2]</td>
                 <td>$par[3]</td>
-                
-                <td><a href='../controller/modifierens.php?id=$par[0]'>modifier enseignant</a></td>
+                <td>
+                    <a href='../view/modifier.php?id=$par[0]' class='text-primary'>
+                        <i class='fas fa-edit'></i>
+                    </a>
+                    <a href='../controller/supprimerEnseignant.php?id=$par[0]' class='text-danger' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cet enseignant?\");'>
+                        <i class='fas fa-trash-alt'></i>
+                    </a>
+                </td>
                 </tr>";
             }
             ?>
@@ -194,53 +222,40 @@ if (isset($_POST['enseignant'])) {
     </table>
 <?php
     } else {
-        echo "<p>Aucun enseignant trouvé .</p>";
+        echo "<p>Aucun enseignant trouvé.</p>";
     }
 }
 ?>
 
-
-
-
-<h1>La Liste de toutes les formations</h1>
 <table class="table" id="example">
     <thead>
         <tr class="table-header">
-      
             <th>cin</th>
-             <th>nom et prénom</th>
+            <th>nom et prénom</th>
             <th>mail</th>
-            <th>modifier</th>
-            
-         </tr>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
-        
         <?php
-       /*foreach ($lesenseignants as $key => $value) {
-        echo "Numéro de colonne : $key <br>";
-        foreach ($value as $subKey => $subValue) {
-            echo "   Sous-colonne : $subKey, Contenu : $subValue <br>";
-        }
-    }
-    */
-        
         foreach ($lesenseignants as $forma) {
             echo "<tr class='table-data'>
                 <td>$forma[0]</td>
                 <td>$forma[2]</td>
                 <td>$forma[3]</td>
-                <td><a href='../controller/modifierens.php?id=$forma[0]'>modifier enseignant</a></td>
-                
+                <td>
+                    <a href='../view/modifier.php?id=$forma[0]' class='text-primary'>
+                        <i class='fas fa-edit'></i>
+                    </a>
+                    <a href='../controller/supprimerEnseignant.php?id=$forma[0]' class='text-danger' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cet enseignant?\");'>
+                        <i class='fas fa-trash-alt'></i>
+                    </a>
+                </td>
             </tr>";
         }
-
-        echo "</tbody></table>";
-       
-?>
-
-
+        ?>
+    </tbody>
+</table>
 </div>
 </body>
-
 </html>

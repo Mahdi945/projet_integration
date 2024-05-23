@@ -35,7 +35,7 @@
                         <th>CIN Binôme 1</th>
                         <th>CIN Binôme 2</th>
                         <th hidden>Email Binôme 1</th>
-                <th hidden>Email Binôme 2</th>
+                        <th hidden>Email Binôme 2</th>
                         <th>Titre du Projet</th>
                         <th>Nom de l'Entreprise</th>
                         <th>Encadreur Entreprise</th>
@@ -135,7 +135,7 @@
         }
         ?>
   
-        <div id="refusForm" style="display: none;">
+  <div id="refusForm" style="display: none;">
             <span class="close-icon" onclick="closeRefusForm()"><i class="fas fa-times"></i></span>
             <h2>Raison de refus</h2>
             <form action="../controller/voirformulaire.php" method="POST">
@@ -143,9 +143,10 @@
                 <input type="hidden" id="emailEtud1" name="email_etud1">
                 <input type="hidden" id="emailEtud2" name="email_etud2">
                 <textarea name="raison_refus" id="raisonRefus" cols="30" rows="5"></textarea><br>
-                <button type="submit">Submit</button>
+                <button type="submit" name="avis" value="refus" class="btn" onclick="refuserProjet(this)">Envoyer</button>
             </form>
-        </div>
+        </div> <br>
+        
 
         <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -314,6 +315,46 @@ async function downloadPDF() {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src ="../etat.js"></script>
+    <button id="exportExcelBtn" class="btn btn-primary" onclick="extraireExcel()">Extraire Excel</button>
+    </div>
+    <script src ="../etat.js">
+</script>
+    <?php
+if ($emailEnvoye) {
+    echo "<script>
+    function updateEtatProjet(idProjet, etat) {
+        var formData = new FormData();
+        formData.append('id_projet', idProjet);
+        formData.append('etat', etat);
+
+        fetch('../controller/updateEtatProjet.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la requête');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log('Etat du projet mis à jour avec succès');
+            } else {
+                console.log('Erreur lors de la mise à jour de l\'état du projet');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error.message);
+        });
+    }
+
+    // Appeler la fonction avec les paramètres appropriés
+   
+    </script>";
+    echo "<script>alert('Email de refus envoyé avec succès');</script>";
+}
+?>
 </body>
 
 </html>

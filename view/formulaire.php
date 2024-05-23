@@ -55,15 +55,23 @@ $cin = isset($_GET['cin']) ? $_GET['cin'] : null;
             background-color: #45a049;
         }
     </style>
-    <script>
+
+
+<script>
     document.addEventListener("DOMContentLoaded", function() {
-        const deadline = new Date("2024-05-20T22:06:00"); // Date limite
+        const deadline = new Date("2024-05-25T23:59:59"); // Date limite
         const now = new Date(); // Date actuelle
 
         // Vérifier si la date limite est dépassée
         if (now > deadline) {
             alert("Vous avez dépassé la date limite.");
             window.location.href = "../view/loginEtudiant.php";
+        } else {
+            // Format the deadline date as a string
+            const deadlineString = deadline.toLocaleString();
+
+            // Insert the deadline date into the message
+            document.getElementById("deadlineMessage").textContent = "Le formulaire est modifiable jusqu'au " + deadlineString + ".";
         }
     });
 </script>
@@ -131,7 +139,7 @@ if ($rowCount > 0) {
     
     <input type="submit" name="submit" value="Soumettre">
     <input type="submit" name="submit" value="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ?');">
-    <p>Le formulaire est modifiable jusqu'au 20/05/2024 21:00.</p>
+    <p id="deadlineMessage" style="color: red;"></p>
 </form>
 <?php 
 }else{ ?>
@@ -178,8 +186,10 @@ if ($rowCount > 0) {
         <p style="font-weight: normal; font-size: 0.8em;">Seuls les fichiers .pdf sont acceptés.</p><br>
         <input type="submit" name="submit" value="Soumettre">
         
+        
         <input type="submit" name="submit" value="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ?');">
-        <p>Le formulaire est modifiable jusqu'au 20/05/2024 21:00.</p>
+        <p id="deadlineMessage" style="color: red;"></p>
+        
     </form>
     <script>
         function capitalizeFirstLetter(input) {

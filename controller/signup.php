@@ -11,6 +11,7 @@ use PHPMailer\PHPMailer\Exception;
 
 $connexion = new connexion();
 $pdo = $connexion->getConnexion();
+$crud_etudiant = new crud_etudiant();
 
 if(isset($_POST['cin']) && isset($_POST['email']) && isset($_POST['Password']) && isset($_POST['Conf-Password'])){
     $fcin = $_POST['cin'];
@@ -39,17 +40,24 @@ if(isset($_POST['cin']) && isset($_POST['email']) && isset($_POST['Password']) &
         header("Location: ../index.php?error=$em");
         exit;
     } else {
+        // Vérifier si l'email existe déjà
+        if ($crud_etudiant->emailExists($fEmail)) {
+            $em = "Email déja utilisé";
+            header("Location: ../view/signup.php?error=$em");
+            exit;
+        }
+
+        // Vérifier si le CIN existe déjà
         $sql = "SELECT cin_etudiant1 FROM etudiant WHERE cin_etudiant1 = :cin";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['cin' => $fcin]);
         if($stmt->rowCount() == 0) {
             $em = "Vous ne faites pas partie des étudiants de L3";
-            header("Location: ../index.php?error=$em");
+            header("Location: ../view/signup.php?error=$em");
             exit;
         } else {
             try {
                 $hashedPassword = password_hash($fPassword, PASSWORD_DEFAULT);
-                $crud_etudiant = new crud_etudiant();
                 $addlaformation = $crud_etudiant->inscrit($fcin, $fEmail, $hashedPassword);
                 
                 // Générer un code OTP
